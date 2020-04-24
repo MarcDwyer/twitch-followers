@@ -1,0 +1,26 @@
+.nav {
+  height: 100%;
+  flex: 0 0 325px;
+  background-color: #24303a;
+  display: flex;
+  flex-direction: column;
+  color: #eee;
+
+  .inner-nav {
+    width: 85%;
+    margin: 10px auto 10px auto;
+    display: flex;
+    flex-direction: column;
+
+    .logo {
+      font-size: 32px;
+      margin: auto;
+      color: rgba(238, 238, 238, 1);
+      font-family: "Lobster", cursive;
+
+      &:hover {
+        color: rgba(238, 238, 238, 0.75);
+      }
+    }
+  }
+}
