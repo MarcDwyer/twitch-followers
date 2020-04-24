@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Search from "./components/Search/search";
 import Nav from "./components/Navbar/nav";
 import Results from "./components/Results/results";
+import Homepage from "./components/Homepage/homepage";
 
 import "antd/dist/antd.css";
 import "./App.scss";
@@ -18,7 +18,7 @@ function App() {
         <Nav />
         <Switch>
           <Route path="/:user" component={Results} />
-          <Route path="/" component={Search} />
+          <Route path="/" component={Homepage} />
         </Switch>
       </BrowserRouter>
     </div>

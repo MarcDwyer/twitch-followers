@@ -1,49 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { FTwitchData } from "../../types";
+import { useFollowers } from "../../hooks";
 
-type ErrorMsg = {
-  error: string;
-};
-type UseFollowersResults = [FTwitchData.RootChannel | null, ErrorMsg | null];
-const fetchUser = async (
-  user: string
-): Promise<ErrorMsg | FTwitchData.RootChannel> => {
-  try {
-    console.log(process.env.NODE_ENV);
-    const f = await fetch(`/followers/${user}`);
-    const results = await f.json();
-    return results;
-  } catch (err) {
-    console.log(err);
-    return { error: "Error reaching server" };
-  }
-};
-const useFollowers = (user: string | undefined): UseFollowersResults => {
-  const [followers, setFollowers] = useState<FTwitchData.RootChannel | null>(
-    null
-  );
-  const [er, setEr] = useState<ErrorMsg | null>(null);
-  useEffect(() => {
-    (async () => {
-      if (user) {
-        const result = await fetchUser(user);
-        if ("error" in result) {
-          setEr(result);
-        } else {
-          if (er) setEr(null);
-          setFollowers(result);
-        }
-      }
-    })();
-  }, [user]);
-  return [followers, er];
-};
+import "./results.scss";
+
 const Results = () => {
   const { user } = useParams();
   const [followers, err] = useFollowers(user);
-  console.log(followers, err);
-  return <span>{user}</span>;
+  return (
+    <div className="main-results">
+      {!err && followers && (
+        <React.Fragment>
+          <h1>
+            {user} follows {followers._total} streams
+          </h1>
+          <div className="inner-results">
+            {followers.follows.map(({ channel, created_at }) => {
+              const date = new Date(created_at);
+              return (
+                <a
+                  className="card"
+                  key={channel._id}
+                  href={channel.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src={channel.logo} alt="yes" />
+                  <div className="info">
+                    <span className="display-name">{channel.display_name}</span>
+                    <span>Followed on: {date.toDateString()}</span>
+                  </div>
+                </a>
+              );
+            })}
+            ;
+          </div>
+        </React.Fragment>
+      )}
+    </div>
+  );
 };
 
 export default Results;

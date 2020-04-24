@@ -22,7 +22,7 @@ export default class Twitch {
     const followers = await fetchSomething(url, this.client_id);
     return followers;
   }
-  async getId(user: string): Promise<TwitchData.IdRoot> {
+  private async getId(user: string): Promise<TwitchData.IdRoot> {
     const url = `https://api.twitch.tv/helix/users?login=${user}`;
     const id = await fetchSomething(url, this.client_id);
     return id;

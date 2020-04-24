@@ -1,0 +1,49 @@
+.main-results {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+
+  h1 {
+    margin-left: 5px;
+    color: inherit !important;
+  }
+  .inner-results {
+    width: 98%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+
+    .card {
+      margin: 5px auto 5px auto;
+      width: 185px;
+      max-height: 320px;
+      background-color: #24303a;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      color: inherit;
+
+      img {
+        height: 225px;
+        width: 100%;
+      }
+      .info {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 5px 5px;
+
+        .display-name {
+          font-weight: bold;
+        }
+
+        span {
+          margin: auto;
+        }
+      }
+    }
+  }
+}
