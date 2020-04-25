@@ -18,7 +18,7 @@ export default class Twitch {
       return { error: "No results were found" };
     }
     const { id } = data[0];
-    const url = `https://api.twitch.tv/kraken/users/${id}/follows/channels?limit=100`;
+    const url = `https://api.twitch.tv/kraken/users/${id}/follows/channels?limit= `;
     const followers = await fetchSomething(url, this.client_id);
     return followers;
   }

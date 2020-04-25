@@ -11,7 +11,9 @@ const Nav = () => {
         <Link to="/" className="logo">
           Simp Checker
         </Link>
-        <Search />
+        <div className="searchbar">
+          <Search />
+        </div>
       </div>
     </div>
   );

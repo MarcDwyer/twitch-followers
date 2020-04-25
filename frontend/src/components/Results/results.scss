@@ -1,17 +1,19 @@
 .main-results {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 100%;
   overflow-y: auto;
+  border: 2px solid red;
 
+  .center-loader {
+    margin: auto;
+  }
   h1 {
     margin-left: 5px;
     color: inherit !important;
   }
   .inner-results {
     width: 98%;
-    height: 100%;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
