@@ -50,5 +50,10 @@ export declare module FTwitchData {
   export interface RootChannel {
     _total: number;
     follows: ChannelData[];
+    limit: number;
   }
 }
+
+export type ErrorMsg = {
+  error: string;
+};

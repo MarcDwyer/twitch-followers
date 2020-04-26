@@ -2,10 +2,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow-y: auto;
-  border: 2px solid red;
+  overflow-y: scroll;
 
-  .center-loader {
+  .center-results {
     margin: auto;
   }
   h1 {
@@ -31,6 +30,7 @@
       img {
         height: 225px;
         width: 100%;
+        margin: auto;
       }
       .info {
         display: flex;

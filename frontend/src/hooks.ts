@@ -7,11 +7,12 @@ type ErrorMsg = {
 type UseFollowersResults = [FTwitchData.RootChannel | null, ErrorMsg | null];
 
 const fetchUser = async (
-  user: string
+  user: string,
+  offset: number
 ): Promise<ErrorMsg | FTwitchData.RootChannel> => {
   try {
-    console.log(process.env.NODE_ENV);
-    const f = await fetch(`/followers/${user}`);
+    const url = `/followers/${user}/${offset}`;
+    const f = await fetch(url);
     const results = await f.json();
     return results;
   } catch (err) {
@@ -19,7 +20,10 @@ const fetchUser = async (
     return { error: "Error reaching server" };
   }
 };
-export const useFollowers = (user: string | undefined): UseFollowersResults => {
+export const useFollowers = (
+  user: string | undefined,
+  offset: number
+): UseFollowersResults => {
   const [followers, setFollowers] = useState<FTwitchData.RootChannel | null>(
     null
   );
@@ -27,7 +31,8 @@ export const useFollowers = (user: string | undefined): UseFollowersResults => {
   useEffect(() => {
     (async () => {
       if (user) {
-        const result = await fetchUser(user);
+        const result = await fetchUser(user, offset);
+        console.log(result);
         if ("error" in result) {
           setEr(result);
         } else {

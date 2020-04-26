@@ -17,7 +17,7 @@ const server = new Hapi.Server({
 });
 
 async function main() {
-  const twitch = new Twitch(CLIENT);
+  const twitch = new Twitch(CLIENT, 35);
   setRoutes(server, twitch);
   await server.start();
 }
