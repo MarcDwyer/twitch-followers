@@ -2,7 +2,6 @@ import { FTwitchData, ErrorMsg } from "./types";
 
 export function debounce(func: Function, duration: number) {
   let timer: undefined | number;
-  console.log("called debounce");
   return function () {
     const args = arguments,
       //@ts-ignore
@@ -16,7 +15,7 @@ export function debounce(func: Function, duration: number) {
 
 export const fetchUser = async (
   user: string,
-  offset: number
+  offset: number,
 ): Promise<ErrorMsg | FTwitchData.RootChannel> => {
   try {
     const url = `/followers/${user}/${offset}`;

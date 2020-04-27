@@ -16,7 +16,8 @@ export type Action = {
 export const INIT_FOLLOWERS = Symbol("init_payload"),
   MERGE_FOLLOWERS = Symbol("merge_payload"),
   CHANGE_OFFSET = Symbol("offset"),
-  ERROR_MSG = Symbol("error_msg");
+  ERROR_MSG = Symbol("error_msg"),
+  RESET = Symbol("reset");
 
 function ResultsReducer(
   state: ResultsState,
@@ -25,8 +26,7 @@ function ResultsReducer(
   console.log(type);
   switch (type) {
     case INIT_FOLLOWERS:
-      const c = { ...initState, followers: payload };
-      console.log(c);
+      const c = { ...state, followers: payload };
       return c;
     case CHANGE_OFFSET:
       return { ...state, offset: payload };
@@ -40,6 +40,8 @@ function ResultsReducer(
         copy.followers.follows = follows;
       }
       return copy;
+    case RESET:
+      return initState;
     default:
       return state;
   }

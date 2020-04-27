@@ -5,9 +5,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #eee !important;
+  color: rgba(255, 255, 255, 0.75) !important;
 }
 
+h2 {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

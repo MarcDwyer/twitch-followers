@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useReducer, Reducer } from "react";
-import { useParams, RouteComponentProps } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import { fetchUser } from "../../util";
 import { useDebouncedCallback } from "use-debounce";
@@ -11,9 +11,13 @@ import ResultsReducer, {
   INIT_FOLLOWERS,
   CHANGE_OFFSET,
   ERROR_MSG,
+  RESET,
 } from "./results_reducer";
+import { Theme } from "../../theme";
 
 import { FTwitchData, ErrorMsg } from "../../types";
+
+import Card from "../Card/card";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./results.scss";
@@ -51,7 +55,7 @@ const Results = () => {
   const [paginate] = useDebouncedCallback(() => {
     const isBottom = didScroll();
     if (isBottom && followers) {
-      let newOffset = offset + 35;
+      let newOffset = offset + followers.limit;
       if (newOffset <= followers._total) {
         console.log(newOffset, followers._total);
         dispatch({ type: CHANGE_OFFSET, payload: newOffset });
@@ -88,6 +92,7 @@ const Results = () => {
   }, []);
   useEffect(() => {
     if (!user) return;
+    dispatch({ type: RESET, payload: null });
     fetchUser(user, 0).then((payload) => {
       handlePayload(payload, INIT_FOLLOWERS);
     });
@@ -101,8 +106,18 @@ const Results = () => {
     });
     prevOffset.current = offset;
   }, [offset]);
+  useEffect(() => {
+    if (followers && followers.follows) {
+      const amy = followers?.follows.filter((f) => f.channel.name === "amyec3");
+      console.log(amy);
+    }
+  }, [followers]);
   return (
-    <div className="main-results" ref={resRef}>
+    <div
+      className="main-results"
+      ref={resRef}
+      style={{ backgroundColor: Theme.backgroundColor }}
+    >
       {user && !error && !followers && (
         <div className="center-results">
           <Loader
@@ -116,7 +131,7 @@ const Results = () => {
       )}
       {error && (
         <div className="center-results">
-          <span>{error.error}</span>
+          <h2>{error.error}</h2>
         </div>
       )}
       {!error && followers && (
@@ -126,22 +141,7 @@ const Results = () => {
           </h1>
           <div className="inner-results">
             {followers.follows.map(({ channel, created_at }) => {
-              const date = new Date(created_at);
-              return (
-                <a
-                  className="card"
-                  key={channel._id}
-                  href={channel.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src={channel.logo} alt="yes" />
-                  <div className="info">
-                    <span className="display-name">{channel.display_name}</span>
-                    <span>Followed on: {date.toDateString()}</span>
-                  </div>
-                </a>
-              );
+              return <Card channel={channel} created_at={created_at} />;
             })}
           </div>
         </React.Fragment>

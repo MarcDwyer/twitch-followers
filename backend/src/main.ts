@@ -1,25 +1,20 @@
-import Hapi from "@hapi/hapi";
-import setRoutes from "./routes";
-import { config } from "dotenv";
+import { config } from "https://deno.land/x/dotenv/dotenv.ts";
+import { Server } from "https://deno.land/x/denotrain/mod.ts";
+import Twitch from "./twitch.ts";
 
-import Twitch from "./twitch";
+const { CLIENT } = config();
 
-config();
+const twitch = new Twitch(CLIENT, 65);
 
-const { CLIENT } = process.env;
-
-const server = new Hapi.Server({
+const server = new Server({
   port: 1337,
-  host: "localhost",
-  routes: {
-    cors: true,
-  },
 });
 
-async function main() {
-  const twitch = new Twitch(CLIENT, 35);
-  setRoutes(server, twitch);
-  await server.start();
-}
+server.get("/followers/:user/:offset", async (req) => {
+  const { user, offset } = req.param;
+  //@ts-ignore
+  const followers = await twitch.getFollowers(user, offset);
+  return { ...followers, limit: twitch.limit };
+});
 
-main().catch((err) => console.log(err));
+await server.run();

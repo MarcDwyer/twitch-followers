@@ -1,9 +1,8 @@
-import fetch from "node-fetch";
-
 export const fetchSomething = async (url: string, id?: string) => {
   try {
     const f = await fetch(url, {
       method: "GET",
+      //@ts-ignore
       headers: {
         Accept: "application/vnd.twitchtv.v5+json",
         "Client-ID": id,
