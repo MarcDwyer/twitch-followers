@@ -8,14 +8,18 @@
     margin: auto;
   }
   h1 {
-    margin-left: 5px;
+    margin: 10px auto 10px 25px;
     color: inherit !important;
   }
   .inner-results {
-    width: 98%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
     display: flex;
-    flex-wrap: wrap;
+
+    .result-grid {
+      display: flex;
+      flex-wrap: wrap;
+      margin: auto;
+      width: 95%;
+    }
   }
 }

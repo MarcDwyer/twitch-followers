@@ -1,21 +1,8 @@
 import { FTwitchData, ErrorMsg } from "./types";
 
-export function debounce(func: Function, duration: number) {
-  let timer: undefined | number;
-  return function () {
-    const args = arguments,
-      //@ts-ignore
-      ctx = this;
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(ctx, args);
-    }, duration);
-  };
-}
-
 export const fetchUser = async (
   user: string,
-  offset: number,
+  offset: number
 ): Promise<ErrorMsg | FTwitchData.RootChannel> => {
   try {
     const url = `/followers/${user}/${offset}`;
@@ -26,4 +13,22 @@ export const fetchUser = async (
     console.log(err);
     return { error: "Error reaching server" };
   }
+};
+
+export const isInArray = (arr: Array<string>, user: string) => {
+  const result = arr.indexOf(user);
+  return result !== -1;
+};
+
+export const checkDupes = (followers: FTwitchData.ChannelData[]) => {
+  const results: any = {};
+
+  for (const { channel } of followers) {
+    if (channel._id in results) {
+      results[channel._id] = results[channel._id] + 1;
+    } else {
+      results[channel._id] = 1;
+    }
+  }
+  return results;
 };

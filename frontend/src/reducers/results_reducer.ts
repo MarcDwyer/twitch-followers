@@ -1,6 +1,5 @@
-import { FTwitchData } from "../../types";
-import { ErrorMsg } from "../../types";
-import { initState } from "./results";
+import { FTwitchData, ErrorMsg } from "../types";
+import { Action } from "./main";
 
 export type ResultsState = {
   followers: FTwitchData.RootChannel | null;
@@ -8,9 +7,10 @@ export type ResultsState = {
   offset: number;
 };
 
-export type Action = {
-  type: Symbol;
-  payload: any;
+const initState = {
+  followers: null,
+  error: null,
+  offset: 0,
 };
 
 export const INIT_FOLLOWERS = Symbol("init_payload"),
@@ -20,16 +20,13 @@ export const INIT_FOLLOWERS = Symbol("init_payload"),
   RESET = Symbol("reset");
 
 function ResultsReducer(
-  state: ResultsState,
+  state: ResultsState = initState,
   { type, payload }: Action
 ): ResultsState {
-  console.log(type);
   switch (type) {
     case INIT_FOLLOWERS:
       const c = { ...state, followers: payload };
       return c;
-    case CHANGE_OFFSET:
-      return { ...state, offset: payload };
     case ERROR_MSG:
       return { ...state, error: payload };
     case MERGE_FOLLOWERS:
@@ -41,7 +38,10 @@ function ResultsReducer(
       }
       return copy;
     case RESET:
+      console.log("resetting");
       return initState;
+    case CHANGE_OFFSET:
+      return { ...state, offset: payload };
     default:
       return state;
   }

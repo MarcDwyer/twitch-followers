@@ -57,3 +57,7 @@ export declare module FTwitchData {
 export type ErrorMsg = {
   error: string;
 };
+
+export type RecentlyLS = {
+  [username: string]: boolean;
+};
