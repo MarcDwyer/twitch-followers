@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { SET_RECENT } from "./reducers/recent_reducer";
+import { SET_RECENT } from "./reducers/results_reducer";
 
 import Nav from "./components/Navbar/nav";
 import Results from "./components/Results/results";
@@ -17,7 +17,9 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const local = localStorage.getItem("recently");
-    dispatch({ type: SET_RECENT, payload: local ? JSON.parse(local) : [] });
+    if (local) {
+      dispatch({ type: SET_RECENT, payload: JSON.parse(local) });
+    }
   }, []);
   return (
     <div className="App">

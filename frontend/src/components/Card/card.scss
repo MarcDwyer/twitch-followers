@@ -1,13 +1,11 @@
 .card {
-  margin: 5px;
   width: 185px;
-  max-height: 320px;
   background-color: #141414;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   color: inherit;
-  margin: 0 auto 0 auto;
+  margin: 0 auto 10px auto;
 
   img {
     height: 225px;

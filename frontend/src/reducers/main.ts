@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import RecentReducer from "./recent_reducer";
 import ResultsReducer, { ResultsState } from "./results_reducer";
 
 export type Action = {
@@ -9,12 +8,10 @@ export type Action = {
 
 export declare namespace ReduxStore {
   export interface Store {
-    recently: string[];
-    results: ResultsState;
+    appData: ResultsState;
   }
 }
 
 export default combineReducers({
-  recently: RecentReducer,
-  results: ResultsReducer,
+  appData: ResultsReducer,
 });

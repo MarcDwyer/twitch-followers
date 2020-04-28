@@ -8,7 +8,6 @@ import { ReduxStore } from "../../reducers/main";
 import { Theme } from "../../theme";
 
 import { getPagination } from "../../actions/result_actions";
-import { addRecent } from "../../actions/recent_actions";
 import { RESET, CHANGE_OFFSET } from "../../reducers/results_reducer";
 
 import Card from "../Card/card";
@@ -19,19 +18,19 @@ import "./results.scss";
 const Results = () => {
   const { user } = useParams();
   const dispatch = useDispatch();
-  const { recently, results } = useSelector((store: ReduxStore.Store) => store);
-  const { userData, error, offset } = results;
+  const { appData } = useSelector((store: ReduxStore.Store) => store);
+  const { userData, error, offset } = appData;
 
   const resRef = useRef<HTMLDivElement | null>(null);
   const listenerCount = useRef<number>(0);
 
-  const didScroll = () => {
+  const didScrollBottom = () => {
     const { current } = resRef;
     if (current) {
       const sheight = current.scrollHeight,
         scrollTop = current.scrollTop,
         height = current.clientHeight;
-      const res = sheight - scrollTop === height;
+      const res = sheight - scrollTop <= height + 500;
       return res;
     } else {
       return false;
@@ -39,10 +38,11 @@ const Results = () => {
   };
   //Checks to see if you're fully scrolled down, if you are fetch paginated data
   const [paginate] = useDebouncedCallback(() => {
-    const isBottom = didScroll();
+    const isBottom = didScrollBottom();
     if (isBottom && userData) {
       let newOffset = offset + userData.limit;
       if (newOffset <= userData._total) {
+        console.log("fetching new data");
         dispatch({ type: CHANGE_OFFSET, payload: newOffset });
       }
     }
@@ -54,7 +54,7 @@ const Results = () => {
       current.addEventListener("scroll", paginate);
       listenerCount.current++;
     }
-    return function () {
+    return () => {
       if (current) current.removeEventListener("scroll", paginate);
       dispatch({ type: RESET });
     };
@@ -71,11 +71,6 @@ const Results = () => {
       dispatch(getPagination(user, offset));
     }
   }, [offset]);
-  useEffect(() => {
-    if (user && recently) {
-      dispatch(addRecent(user));
-    }
-  }, [user, recently]);
   return (
     <div
       className="main-results"

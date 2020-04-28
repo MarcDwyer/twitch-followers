@@ -4,23 +4,36 @@ import { Link } from "react-router-dom";
 import { Theme } from "../../theme";
 import { useSelector } from "react-redux";
 import { ReduxStore } from "../../reducers/main";
+import { FaTwitch } from "react-icons/fa";
 
 import Recently from "../Recently_Searched/rs";
 
 import "./nav.scss";
 
 const Nav = () => {
-  const data = useSelector((store: ReduxStore.Store) => store.results.userData);
-  console.log(data);
+  const userData = useSelector(
+    (store: ReduxStore.Store) => store.appData.userData
+  );
   return (
     <div className="nav" style={{ backgroundColor: Theme.shadeColor }}>
       <div className="inner-nav">
         <Link to="/" className="logo">
           Followers
         </Link>
-        <h2 className="display-name">
-          {data ? `Viewing: ${data.viewing.display_name}` : `Search for a user`}
-        </h2>
+        {userData && (
+          <div className="user-info">
+            <span className="display-name">
+              {userData.viewing.display_name}
+            </span>
+            <a
+              href={`https://www.twitch.tv/${userData.viewing.display_name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaTwitch color="#5b24c2" />
+            </a>
+          </div>
+        )}
         <div className="searchbar">
           <Search />
         </div>

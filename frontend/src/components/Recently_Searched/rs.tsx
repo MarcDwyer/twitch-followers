@@ -2,12 +2,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ReduxStore } from "../../reducers/main";
 
-import { Link } from "react-router-dom";
+import { RecentLink } from "../../styled-components"
+
 import { Theme } from "../../theme";
 import "./rs.scss";
 
 const RS = () => {
-  const recent = useSelector((store: ReduxStore.Store) => store.recently);
+  const recent = useSelector((store: ReduxStore.Store) => store.appData.recently);
   return (
     <div className="main-recently">
       <h2 style={{ color: Theme.color }}>Recently searched</h2>
@@ -15,9 +16,11 @@ const RS = () => {
         {recent &&
           recent.map((k) => {
             return (
-              <Link key={k} to={`/${k}`}>
+              <RecentLink key={k} to={`/${k}`} >
+              <span>
                 {k}
-              </Link>
+              </span>
+              </RecentLink>
             );
           })}
       </div>

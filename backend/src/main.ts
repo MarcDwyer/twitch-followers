@@ -1,20 +1,34 @@
 import { config } from "https://deno.land/x/dotenv/dotenv.ts";
-import { Server } from "https://deno.land/x/denotrain/mod.ts";
+import { serve } from "https://deno.land/std@v0.36.0/http/server.ts";
 import Twitch from "./twitch.ts";
 
+type BodyData = {
+  offset: number;
+  user: string;
+};
+
 const { CLIENT } = config();
+const s = serve({ port: 1337 });
 
-const twitch = new Twitch(CLIENT, 65);
+const twitch = new Twitch(CLIENT, 55);
 
-const server = new Server({
-  port: 1337,
-});
+const txtDecoder = new TextDecoder();
 
-server.get("/followers/:user/:offset", async (req) => {
-  const { user, offset } = req.param;
-  //@ts-ignore
-  const data = await twitch.getFollowers(user, offset);
-  return { ...data, limit: twitch.limit };
-});
-
-await server.run();
+for await (const req of s) {
+  switch (req.url) {
+    case "/followers/":
+      const data = await Deno.readAll(req.body);
+      const { user, offset }: BodyData = JSON.parse(txtDecoder.decode(data));
+      const followerData = await twitch.getFollowers(user, offset);
+      await req.respond(
+        {
+          status: 200,
+          body: JSON.stringify({ ...followerData, limit: twitch.limit }),
+        },
+      );
+    default:
+      req.respond(
+        { status: 400, body: JSON.stringify({ error: "Route not found" }) },
+      );
+  }
+}

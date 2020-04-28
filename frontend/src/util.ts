@@ -1,16 +1,26 @@
 import { FTwitchData, ErrorMsg } from "./types";
 
+// content-type: application/json, accept: */*, content-length: 32, base_url: localhost
 export const fetchUser = async (
   user: string,
-  offset: number
+  offset: number,
 ): Promise<ErrorMsg | FTwitchData.RootChannel> => {
   try {
-    const url = `/followers/${user}/${offset}`;
-    const f = await fetch(url);
+    const url = "/followers/";
+    const payload = {
+      user,
+      offset,
+    };
+    const f = await fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
     const results = await f.json();
     return results;
   } catch (err) {
-    console.log(err);
     return { error: "Error reaching server" };
   }
 };
