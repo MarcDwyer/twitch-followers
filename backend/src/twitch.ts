@@ -19,12 +19,12 @@ export default class Twitch {
     if (!data.length) {
       return { error: "No results were found" };
     }
-    const { id } = data[0];
+    const channel = data[0];
     const url =
-      `https://api.twitch.tv/kraken/users/${id}/follows/channels?limit=${this
+      `https://api.twitch.tv/kraken/users/${channel.id}/follows/channels?limit=${this
         .limit + "&offset=" + offset}`;
-    const followers = await fetchSomething(url, this.client_id);
-    return followers;
+    const userData = await fetchSomething(url, this.client_id);
+    return { ...userData, viewing: channel };
   }
   private async getId(user: string): Promise<TwitchData.IdRoot> {
     const url = `https://api.twitch.tv/helix/users?login=${user}`;

@@ -2,13 +2,13 @@ import { FTwitchData, ErrorMsg } from "../types";
 import { Action } from "./main";
 
 export type ResultsState = {
-  followers: FTwitchData.RootChannel | null;
+  userData: FTwitchData.RootChannel | null;
   error: ErrorMsg | null;
   offset: number;
 };
 
 const initState = {
-  followers: null,
+  userData: null,
   error: null,
   offset: 0,
 };
@@ -25,16 +25,16 @@ function ResultsReducer(
 ): ResultsState {
   switch (type) {
     case INIT_FOLLOWERS:
-      const c = { ...state, followers: payload };
+      const c = { ...state, userData: payload };
       return c;
     case ERROR_MSG:
       return { ...state, error: payload };
     case MERGE_FOLLOWERS:
       if (!state) return state;
       const copy = { ...state };
-      if (copy.followers) {
-        const follows = [...copy.followers.follows, ...payload.follows];
-        copy.followers.follows = follows;
+      if (copy.userData) {
+        const follows = [...copy.userData.follows, ...payload.follows];
+        copy.userData.follows = follows;
       }
       return copy;
     case RESET:

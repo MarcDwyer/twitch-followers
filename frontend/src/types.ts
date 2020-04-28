@@ -51,6 +51,7 @@ export declare module FTwitchData {
     _total: number;
     follows: ChannelData[];
     limit: number;
+    viewing: SubIdData;
   }
 }
 

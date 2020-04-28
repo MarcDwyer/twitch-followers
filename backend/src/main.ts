@@ -13,8 +13,8 @@ const server = new Server({
 server.get("/followers/:user/:offset", async (req) => {
   const { user, offset } = req.param;
   //@ts-ignore
-  const followers = await twitch.getFollowers(user, offset);
-  return { ...followers, limit: twitch.limit };
+  const data = await twitch.getFollowers(user, offset);
+  return { ...data, limit: twitch.limit };
 });
 
 await server.run();

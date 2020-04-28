@@ -20,7 +20,7 @@ const Results = () => {
   const { user } = useParams();
   const dispatch = useDispatch();
   const { recently, results } = useSelector((store: ReduxStore.Store) => store);
-  const { followers, error, offset } = results;
+  const { userData, error, offset } = results;
 
   const resRef = useRef<HTMLDivElement | null>(null);
   const listenerCount = useRef<number>(0);
@@ -40,9 +40,9 @@ const Results = () => {
   //Checks to see if you're fully scrolled down, if you are fetch paginated data
   const [paginate] = useDebouncedCallback(() => {
     const isBottom = didScroll();
-    if (isBottom && followers) {
-      let newOffset = offset + followers.limit;
-      if (newOffset <= followers._total) {
+    if (isBottom && userData) {
+      let newOffset = offset + userData.limit;
+      if (newOffset <= userData._total) {
         dispatch({ type: CHANGE_OFFSET, payload: newOffset });
       }
     }
@@ -56,6 +56,7 @@ const Results = () => {
     }
     return function () {
       if (current) current.removeEventListener("scroll", paginate);
+      dispatch({ type: RESET });
     };
   }, []);
 
@@ -81,7 +82,7 @@ const Results = () => {
       ref={resRef}
       style={{ backgroundColor: Theme.backgroundColor }}
     >
-      {user && !error && !followers && (
+      {user && !error && !userData && (
         <div className="center-results">
           <Loader
             type="Puff"
@@ -97,14 +98,14 @@ const Results = () => {
           <h2>{error.error}</h2>
         </div>
       )}
-      {!error && followers && (
+      {!error && userData && (
         <React.Fragment>
           <h1>
-            {user} follows {followers._total} streams
+            {user} follows {userData._total} streams
           </h1>
           <div className="inner-results">
             <div className="result-grid">
-              {followers.follows.map(({ channel, created_at }) => {
+              {userData.follows.map(({ channel, created_at }) => {
                 return (
                   <Card
                     key={channel._id}
