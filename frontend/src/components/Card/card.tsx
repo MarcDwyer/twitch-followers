@@ -11,10 +11,6 @@ type Props = {
   created_at: Date;
 };
 
-// href={channel.url}
-// target="_blank"
-// rel="noopener noreferrer"
-
 const Card = (props: Props) => {
   const { channel, created_at } = props;
   const date = new Date(created_at);

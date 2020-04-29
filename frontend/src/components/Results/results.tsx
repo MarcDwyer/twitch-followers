@@ -67,7 +67,7 @@ const Results = () => {
     }
   }, [user]);
   useEffect(() => {
-    if (user) {
+    if (user && userData) {
       dispatch(getPagination(user, offset));
     }
   }, [offset]);

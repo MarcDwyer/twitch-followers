@@ -9,20 +9,22 @@ import { ReduxStore } from "../reducers/main";
 
 type GetState = () => ReduxStore.Store;
 
-export const getPagination = (user: string, offset: number) =>
-  (
-    dispatch: Dispatch,
-    getState: GetState,
-  ) => {
-    fetchUser(user, offset).then((data) => {
+export const getPagination = (user: string, offset: number) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  fetchUser(user, offset)
+    .then((data) => {
+      console.log(data);
       if ("error" in data) throw data;
       const { appData } = getState();
       let recently = appData.recently;
       const check = isInArray(appData.recently, user);
       if (!check) {
-        setLS(user);
         recently = [user, ...recently];
       }
+      if (recently.length >= 20) recently = recently.slice(0, 20);
+      setLS(recently);
       dispatch({
         type: offset ? MERGE_FOLLOWERS : INIT_FOLLOWERS,
         payload: {
@@ -30,21 +32,15 @@ export const getPagination = (user: string, offset: number) =>
           recently,
         },
       });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       dispatch({
         type: ERROR_MSG,
         payload: err,
       });
     });
-  };
+};
 
-const setLS = (user: string) => {
-  const ls = localStorage.getItem("recently");
-  if (ls) {
-    let parsed: string[] = JSON.parse(ls);
-    parsed = [user, ...parsed];
-    localStorage.setItem("recently", JSON.stringify(parsed));
-  } else {
-    localStorage.setItem("recently", JSON.stringify([user]));
-  }
+const setLS = (recently: string[]) => {
+  localStorage.setItem("recently", JSON.stringify(recently));
 };

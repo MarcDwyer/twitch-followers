@@ -20,20 +20,22 @@ const Nav = () => {
         <Link to="/" className="logo">
           Followers
         </Link>
-        {userData && (
-          <div className="user-info">
-            <span className="display-name">
-              {userData.viewing.display_name}
-            </span>
-            <a
-              href={`https://www.twitch.tv/${userData.viewing.display_name}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaTwitch color="#5b24c2" />
-            </a>
-          </div>
-        )}
+        <div className="user-info">
+          {userData && (
+            <React.Fragment>
+              <span className="display-name">
+                {userData.viewing.display_name}
+              </span>
+              <a
+                href={`https://www.twitch.tv/${userData.viewing.display_name}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaTwitch color="#5b24c2" />
+              </a>
+            </React.Fragment>
+          )}
+        </div>
         <div className="searchbar">
           <Search />
         </div>

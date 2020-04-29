@@ -18,6 +18,7 @@ for await (const req of s) {
   switch (req.url) {
     case "/followers/":
       const data = await Deno.readAll(req.body);
+      console.log(1);
       const { user, offset }: BodyData = JSON.parse(txtDecoder.decode(data));
       const followerData = await twitch.getFollowers(user, offset);
       await req.respond(
