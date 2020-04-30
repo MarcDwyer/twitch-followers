@@ -11,9 +11,15 @@ for the backend and ReactJS for the front!
 What you'll need installed: 1. Deno 2. NodeJS
 
 How to use:
-Frontend: 1. npm install 2. npm start 3. Open browser @ http://localhost:3000
 
-    Backend:
-        1. Create .env file in root directory @ backend folder
-        2. Create "CLIENT" variable in enviroment which refers to your Twitch client id
-        3. deno --allow-net --allow-read main.ts
+Frontend:
+
+1. npm install
+2. npm start
+3. Open browser @ http://localhost:3000
+
+Backend:
+
+1. Create .env file in root directory @ backend folder
+2. Create "CLIENT" variable in enviroment which refers to your Twitch client id
+3. deno --allow-net --allow-read main.ts
