@@ -1,6 +1,6 @@
 ## Twitch Followers
 
-    [Image of Twitch Followers](https://i.imgur.com/Gedd4uj.png)
+    ![Image of Twitch Followers](https://i.imgur.com/Gedd4uj.png)
 
     Find out who user's follow on Twitch.tv. Includes pagination, recently search
     stored in local storage and a fun navigational ui. Twitch Followers uses deno
