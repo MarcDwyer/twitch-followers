@@ -1,5 +1,7 @@
 # Twitch Followers
 
+    [Imgur](https://i.imgur.com/Gedd4uj.png)
+
     Find out who user's follow on Twitch.tv. Includes pagination, recently search
     stored in local storage and a fun navigational ui. Twitch Followers uses deno
     for the backend and ReactJS for the front!
@@ -19,4 +21,4 @@
         Backend:
             1. Create .env file in root directory @ backend folder
             2. Create "CLIENT" variable in enviroment which refers to your Twitch client id
-            3. deno --allow-main --allow-read main.ts
+            3. deno --allow-net --allow-read main.ts
