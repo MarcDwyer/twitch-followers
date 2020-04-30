@@ -1,4 +1,4 @@
-# Twitch Followers
+## Twitch Followers
 
     [Image of Twitch Followers](https://i.imgur.com/Gedd4uj.png)
 
