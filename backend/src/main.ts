@@ -7,26 +7,30 @@ type BodyData = {
   user: string;
 };
 
-const { CLIENT } = config();
-const s = serve({ port: 1337 });
+const { CLIENT, PORT } = config();
+
+const port = PORT ? parseInt(PORT) : 1337;
+
+const s = serve({ port });
 
 const twitch = new Twitch(CLIENT, 55);
 
 const txtDecoder = new TextDecoder();
 
+// deno --allow-net --allow-read main.ts
 for await (const req of s) {
   switch (req.url) {
     case "/followers/":
       const data = await Deno.readAll(req.body);
-      console.log(1);
       const { user, offset }: BodyData = JSON.parse(txtDecoder.decode(data));
       const followerData = await twitch.getFollowers(user, offset);
-      await req.respond(
+      req.respond(
         {
           status: 200,
           body: JSON.stringify({ ...followerData, limit: twitch.limit }),
         },
       );
+      break;
     default:
       req.respond(
         { status: 400, body: JSON.stringify({ error: "Route not found" }) },

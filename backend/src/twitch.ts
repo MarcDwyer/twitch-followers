@@ -1,5 +1,6 @@
 import { fetchSomething } from "./util.ts";
 import { TwitchData } from "./twitch_types.ts";
+
 export type BErrorMsg = {
   error: string;
 };
