@@ -8,7 +8,9 @@ for the backend and ReactJS for the front!
 
 ## How to: Use it yourself
 
-What you'll need installed: 1. Deno 2. NodeJS
+What you'll need installed:
+1. Deno 
+2. NodeJS
 
 How to use:
 
