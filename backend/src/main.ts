@@ -7,7 +7,7 @@ type BodyData = {
 };
 
 const twitch_client = Deno.env.get("TWITCH") || "gamering_time";
-
+console.log(twitch_client);
 const port = 1337;
 
 const s = serve({ port });
