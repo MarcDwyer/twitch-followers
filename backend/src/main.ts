@@ -1,18 +1,20 @@
 import { serve } from "https://deno.land/std@v0.42.0/http/server.ts";
 import Twitch from "./twitch.ts";
+import { fetchSomething } from "./util.ts";
 
 type BodyData = {
   offset: number;
   user: string;
 };
-
 const twitch_client = Deno.env.get("TWITCH") || "gamering_time";
 console.log(twitch_client);
 const port = 1337;
 
 const s = serve({ port });
 
-const twitch = new Twitch(twitch_client, 55);
+const fetchTwitch = fetchSomething(twitch_client);
+
+const twitch = new Twitch(55, fetchTwitch);
 
 const txtDecoder = new TextDecoder();
 

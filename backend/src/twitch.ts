@@ -1,4 +1,3 @@
-import { fetchSomething } from "./util.ts";
 import { TwitchData } from "./twitch_types.ts";
 
 export type BErrorMsg = {
@@ -6,11 +5,14 @@ export type BErrorMsg = {
 };
 
 export default class Twitch {
-  private client_id: string;
+  private fetchTwitch: (url: string) => Promise<any>;
   public limit: number;
-  constructor(client_id: string, limit: number) {
-    this.client_id = client_id;
+  constructor(
+    limit: number,
+    fetchTwitch: (url: string) => Promise<any>,
+  ) {
     this.limit = limit;
+    this.fetchTwitch = fetchTwitch;
   }
   async getFollowers(
     user: string,
@@ -24,12 +26,12 @@ export default class Twitch {
     const url =
       `https://api.twitch.tv/kraken/users/${channel.id}/follows/channels?limit=${this
         .limit + "&offset=" + offset}`;
-    const userData = await fetchSomething(url, this.client_id);
+    const userData = await this.fetchTwitch(url);
     return { ...userData, viewing: channel };
   }
   private async getId(user: string): Promise<TwitchData.IdRoot> {
     const url = `https://api.twitch.tv/helix/users?login=${user}`;
-    const id = await fetchSomething(url, this.client_id);
+    const id = await this.fetchTwitch(url);
     return id;
   }
 }
