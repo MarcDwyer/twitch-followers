@@ -6,13 +6,12 @@ type BodyData = {
   offset: number;
   user: string;
 };
-const twitch_client = Deno.env.get("TWITCH") || "gamering_time";
-console.log(twitch_client);
+
 const port = 1337;
 
 const s = serve({ port });
 
-const fetchTwitch = fetchSomething(twitch_client);
+const fetchTwitch = fetchSomething();
 
 const twitch = new Twitch(55, fetchTwitch);
 
