@@ -1,5 +1,4 @@
-import { config } from "https://deno.land/x/dotenv/dotenv.ts";
-import { serve } from "https://deno.land/std@v0.36.0/http/server.ts";
+import { serve } from "https://deno.land/std@v0.42.0/http/server.ts";
 import Twitch from "./twitch.ts";
 
 type BodyData = {
@@ -7,17 +6,17 @@ type BodyData = {
   user: string;
 };
 
-const { CLIENT, PORT } = config();
+const twitch_client = Deno.env.get("TWITCH") || "gamering_time";
 
-const port = PORT ? parseInt(PORT) : 1337;
+const port = 1337;
 
 const s = serve({ port });
 
-const twitch = new Twitch(CLIENT, 55);
+const twitch = new Twitch(twitch_client, 55);
 
 const txtDecoder = new TextDecoder();
 
-// deno --allow-net --allow-read main.ts
+// deno run --allow-net --allow-read main.ts
 for await (const req of s) {
   switch (req.url) {
     case "/followers/":
