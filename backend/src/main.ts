@@ -10,14 +10,12 @@ type BodyData = {
 const port = 1337;
 
 const s = serve({ port });
-
 const fetchTwitch = fetchSomething();
 
 const twitch = new Twitch(55, fetchTwitch);
 
 const txtDecoder = new TextDecoder();
-
-// deno run --allow-net --allow-read main.ts
+// deno run --allow-net --allow-env main.ts
 for await (const req of s) {
   switch (req.url) {
     case "/followers/":

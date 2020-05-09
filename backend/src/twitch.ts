@@ -5,15 +5,10 @@ export type BErrorMsg = {
 };
 
 export default class Twitch {
-  private fetchTwitch: (url: string) => Promise<any>;
-  public limit: number;
   constructor(
-    limit: number,
-    fetchTwitch: (url: string) => Promise<any>,
-  ) {
-    this.limit = limit;
-    this.fetchTwitch = fetchTwitch;
-  }
+    public limit: number,
+    private fetchTwitch: (url: string) => Promise<any>,
+  ) {}
   async getFollowers(
     user: string,
     offset: number | string,
