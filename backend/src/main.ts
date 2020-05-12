@@ -1,6 +1,5 @@
-import { serve } from "https://deno.land/std@v0.42.0/http/server.ts";
+import { serve } from "https://deno.land/std@v0.50.0/http/server.ts";
 import Twitch from "./twitch.ts";
-import { fetchSomething } from "./util.ts";
 
 type BodyData = {
   offset: number;
@@ -10,9 +9,8 @@ type BodyData = {
 const port = 1337;
 
 const s = serve({ port });
-const fetchTwitch = fetchSomething();
 
-const twitch = new Twitch(55, fetchTwitch);
+const twitch = new Twitch(55);
 
 const txtDecoder = new TextDecoder();
 // deno run --allow-net --allow-env main.ts

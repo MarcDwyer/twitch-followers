@@ -51,4 +51,19 @@ export declare module TwitchData {
     _total: number;
     follows: ChannelData[];
   }
+
+  export interface User {
+    display_name: string;
+    _id: string;
+    name: string;
+    type: string;
+    bio?: any;
+    created_at: Date;
+    updated_at: Date;
+    logo: string;
+  }
+  export interface RootUser {
+    _total: number;
+    users: User[];
+  }
 }
