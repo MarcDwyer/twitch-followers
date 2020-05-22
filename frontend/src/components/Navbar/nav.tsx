@@ -11,9 +11,10 @@ import Recently from "../Recently_Searched/rs";
 import "./nav.scss";
 
 const Nav = () => {
-  const userData = useSelector(
-    (store: ReduxStore.Store) => store.appData.userData
+  const viewing = useSelector(
+    (store: ReduxStore.Store) => store.appData.userData?.viewing,
   );
+  console.log(viewing);
   return (
     <div className="nav" style={{ backgroundColor: Theme.shadeColor }}>
       <div className="inner-nav">
@@ -21,13 +22,13 @@ const Nav = () => {
           Followers
         </Link>
         <div className="user-info">
-          {userData && (
+          {viewing && (
             <React.Fragment>
               <span className="display-name">
-                {userData.viewing.display_name}
+                {viewing.display_name}
               </span>
               <a
-                href={`https://www.twitch.tv/${userData.viewing.display_name}`}
+                href={`https://www.twitch.tv/${viewing.name}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

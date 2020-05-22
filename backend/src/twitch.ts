@@ -18,27 +18,26 @@ export default class Twitch {
     public limit: number,
   ) {}
   async getFollowers(
-    user: string,
+    userName: string,
     offset: number | string,
   ): Promise<TwitchData.RootChannel | BErrorMsg> {
-    const userData = await this.getId(user);
+    const userData = await this.getUserData(userName);
     if (!userData) {
       return { error: "No results were found" };
     }
-    const [userId, displayName] = userData;
     const url =
-      `https://api.twitch.tv/kraken/users/${userId}/follows/channels?limit=${this
+      `https://api.twitch.tv/kraken/users/${userData._id}/follows/channels?limit=${this
         .limit + "&offset=" + offset}`;
     const followerData = await fetchTwitch(url, this.key);
-    return { ...followerData, viewing: displayName };
+    return { ...followerData, viewing: userData };
   }
-  private async getId(userName: string): Promise<string[] | null> {
+  private async getUserData(userName: string): Promise<TwitchData.User | null> {
     const url = `https://api.twitch.tv/kraken/users?login=${userName}`;
-    const userData: TwitchData.RootUser = await fetchTwitch(url, this.key);
-    if (!userData || userData && !userData.users.length) {
+    const data: TwitchData.RootUser = await fetchTwitch(url, this.key);
+    if (!data || data && !data.users.length) {
       return null;
     }
-    const { display_name, _id } = userData.users[0];
-    return [_id, display_name];
+    const userData = data.users[0];
+    return userData;
   }
 }

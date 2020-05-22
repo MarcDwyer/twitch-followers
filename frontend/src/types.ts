@@ -9,6 +9,7 @@ export declare module FTwitchData {
     profile_image_url: string;
     offline_image_url: string;
     view_count: number;
+    name: string;
   }
 
   export interface IdRoot {
