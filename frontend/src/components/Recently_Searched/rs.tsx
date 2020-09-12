@@ -40,7 +40,7 @@ const RS = () => {
         </h2>
         <div className="recents">
           {recent.length !== 0 &&
-            recent.map((k) => {
+            recent.reverse().map((k) => {
               return (
                 <RecentLink key={k} to={`/${k}`}>
                   <span>{k}</span>
