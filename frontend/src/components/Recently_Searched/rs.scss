@@ -2,9 +2,16 @@
   display: flex;
   flex-direction: column;
   margin: 10px 0 10px 0;
+  border-radius: 10px;
+  margin: auto;
+  width: 450px;
 
+  .innerdiv {
+    padding: 15px 15px;
+    margin: auto;
+  }
   .recents {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
   }
 }

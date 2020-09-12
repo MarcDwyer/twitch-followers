@@ -5,7 +5,7 @@ export type BErrorMsg = {
   error: string;
 };
 const twitchKey = () => {
-  const key = Deno.env.get("TWITCH");
+  const key = Deno.env.get("client_id");
   if (!key) {
     throw new Error("No Twitch key was found");
   }

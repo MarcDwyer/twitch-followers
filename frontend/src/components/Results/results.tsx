@@ -72,16 +72,12 @@ const Results = () => {
     }
   }, [offset]);
   return (
-    <div
-      className="main-results"
-      ref={resRef}
-      style={{ backgroundColor: Theme.backgroundColor }}
-    >
+    <div className="main-results" ref={resRef}>
       {user && !error && !userData && (
         <div className="center-results">
           <Loader
             type="Puff"
-            color="#00BFFF"
+            color={Theme.reallyLight}
             height={100}
             width={100}
             timeout={3000}
