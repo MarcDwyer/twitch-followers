@@ -9,9 +9,13 @@
   .innerdiv {
     padding: 15px 15px;
     margin: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
   }
   .recents {
     display: flex;
     flex-wrap: wrap;
+    margin: auto;
   }
 }

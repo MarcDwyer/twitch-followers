@@ -24,6 +24,7 @@ export const RecentLink = styled(Link)`
     opacity: 0.75;
   }
 `;
+const topStreams: string[] = ["ninja", "xqcow", "pokimane"];
 
 const RS = () => {
   const recent = useSelector(
@@ -36,17 +37,24 @@ const RS = () => {
     >
       <div className="innerdiv">
         <h2 style={{ color: Theme.color }}>
-          {recent.length ? "Recently searched" : "Search for a user"}
+          {recent.length
+            ? "Your recently searched"
+            : "You haven't searched for a user yet maybe try..."}
         </h2>
         <div className="recents">
-          {recent.length !== 0 &&
-            recent.reverse().map((k) => {
+          {(() => {
+            let result: string[] = topStreams;
+
+            if (recent.length !== 0) result = recent.reverse();
+
+            return result.map((k) => {
               return (
                 <RecentLink key={k} to={`/${k}`}>
                   <span>{k}</span>
                 </RecentLink>
               );
-            })}
+            });
+          })()}
         </div>
       </div>
     </div>
