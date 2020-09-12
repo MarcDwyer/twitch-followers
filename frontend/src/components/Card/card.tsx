@@ -17,24 +17,26 @@ export const AnchorLink = styled.a`
   margin-top: 5px;
   background-color: ${Theme.lightShade};
   text-align: center;
- color: ${Theme.color};
- padding: 5px 5px;
+  color: ${Theme.color};
+  padding: 5px 5px;
 
- &:hover {
-   color: inherit;
- }
+  &:hover {
+    color: inherit;
+    opacity: 0.65;
+  }
 `;
 
 export const MyLink = styled(Link)`
   width: 100%;
   background-color: ${Theme.lightShade};
   text-align: center;
- color: ${Theme.color};
- padding: 5px 5px;
+  color: ${Theme.color};
+  padding: 5px 5px;
 
- &:hover {
-   color: inherit;
- }
+  &:hover {
+    color: inherit;
+    opacity: 0.65;
+  }
 `;
 
 const Card = (props: Props) => {
