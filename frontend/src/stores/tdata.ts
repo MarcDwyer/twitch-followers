@@ -16,7 +16,7 @@ export default class TData {
     }
 
      fetchData = async (user: string) =>  {
-        const prefix = process.env.NODE_ENV === "development" ? `` : `https://twitch-followers.marcdwyer.dev/`;
+        const prefix = process.env.NODE_ENV === "development" ? `` : `https://${document.location.hostname}`;
         const sameSearch = this.data && !("error" in this.data)
         if (sameSearch) {
             //@ts-ignore
