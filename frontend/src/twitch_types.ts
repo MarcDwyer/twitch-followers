@@ -66,5 +66,8 @@ export declare module TwitchData {
       _total: number;
       users: User[];
     }
+    export type ErrorMsg = {
+      error: string;
+    };
   }
   

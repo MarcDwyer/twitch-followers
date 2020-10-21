@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std/http/server.ts";
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
@@ -21,6 +20,7 @@ const router = new Router();
 router.get("/followers/:user/:offset", async (ctx) => {
   const { user, offset } = ctx.params;
   if (!user) return;
+  console.log(offset)
   const fd = await twitch.getFollowers(user, offset || 0);
  ctx.response.body = fd; 
 })
@@ -36,22 +36,3 @@ app.use(
 )
 
 await app.listen({ port });
-// for await (const req of s) {
-//   switch (req.url) {
-//     case "/followers/":
-//       const data = await Deno.readAll(req.body);
-//       const { user, offset }: BodyData = JSON.parse(txtDecoder.decode(data));
-//       const followerData = await twitch.getFollowers(user, offset);
-//       req.respond(
-//         {
-//           status: 200,
-//           body: JSON.stringify({ ...followerData, limit: twitch.limit }),
-//         },
-//       );
-//       break;
-//     default:
-//       req.respond(
-//         { status: 400, body: JSON.stringify({ error: "Route not found" }) },
-//       );
-//   }
-// }

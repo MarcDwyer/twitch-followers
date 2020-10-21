@@ -12,6 +12,8 @@ const twitchKey = () => {
   return key;
 };
 
+const users = new Map<string, TwitchData.User>();
+
 export default class Twitch {
   private key = twitchKey();
   constructor(
@@ -21,13 +23,17 @@ export default class Twitch {
     userName: string,
     offset: number | string,
   ): Promise<TwitchData.RootChannel | BErrorMsg> {
-    const userData = await this.getUserData(userName);
+    let userData: null | undefined | TwitchData.User = users.get(userName) || null;
+    if (!userData) {
+      userData = await this.getUserData(userName);
+    }
     if (!userData) {
       return { error: "No results were found" };
     }
     const url =
       `https://api.twitch.tv/kraken/users/${userData._id}/follows/channels?limit=${this
         .limit + "&offset=" + offset}`;
+        console.log(url)
     const followerData = await fetchTwitch(url, this.key);
     return { ...followerData, viewing: userData };
   }
