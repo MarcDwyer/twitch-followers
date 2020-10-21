@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { SET_RECENT } from "./reducers/results_reducer";
 import { Theme } from "./theme";
+
+import TData from "./stores/tdata";
 
 import Nav from "./components/Navbar/nav";
 import Results from "./components/Results/results";
@@ -23,20 +23,14 @@ const Container = styled.div`
   overflow: hidden;
 `;
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const local = localStorage.getItem("recently");
-    if (local) {
-      dispatch({ type: SET_RECENT, payload: JSON.parse(local) });
-    }
-  }, []);
+  const tData = new TData();
   return (
     <div className="App">
       <BrowserRouter>
         <Nav />
         <Switch>
           <Container>
-            <Route path="/:user" component={Results} />
+            <Route path="/:user" render={() => <Results tData={tData} />} />
             <Route exact path="/" component={RecentlySearch} />
           </Container>
         </Switch>

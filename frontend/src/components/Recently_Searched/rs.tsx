@@ -1,6 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { ReduxStore } from "../../reducers/main";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -27,15 +25,12 @@ export const RecentLink = styled(Link)`
 const topStreams: string[] = ["ninja", "xqcow", "pokimane"];
 
 const RS = () => {
-  const recent = useSelector(
-    (store: ReduxStore.Store) => store.appData.recently
-  );
   return (
     <div
       className="main-recently"
       style={{ backgroundColor: ` ${Theme.lightShade}` }}
     >
-      <div className="innerdiv">
+      {/* <div className="innerdiv">
         <h2 style={{ color: Theme.color }}>
           {recent.length
             ? "Your recently searched"
@@ -56,7 +51,7 @@ const RS = () => {
             });
           })()}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
