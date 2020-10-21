@@ -62,7 +62,7 @@ const Results = observer(({ tData }: Props) => {
   console.log(data);
   return (
     <div className="main-results" ref={resRef}>
-      {user && !data && (
+      {user && !data && !error && (
         <div className="center-results">
           <Loader
             type="Puff"
@@ -75,7 +75,7 @@ const Results = observer(({ tData }: Props) => {
       )}
       {error && (
         <div className="center-results">
-          <h2>{error}</h2>
+          <h2>{error.error}</h2>
         </div>
       )}
       {data && (

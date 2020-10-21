@@ -31,8 +31,7 @@ export default class Twitch {
       return { error: "No results were found" };
     }
     const url =
-      `https://api.twitch.tv/kraken/users/${userData._id}/follows/channels?limit=${this
-        .limit + "&offset=" + offset}`;
+      `https://api.twitch.tv/kraken/users/${userData._id}/follows/channels?offset=${offset}&limit=${this.limit}&sortby=last_broadcast`;
         console.log(url)
     const followerData = await fetchTwitch(url, this.key);
     return { ...followerData, viewing: userData };
