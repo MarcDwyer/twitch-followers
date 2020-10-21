@@ -23,7 +23,7 @@ export default class Twitch {
     userName: string,
     offset: number | string,
   ): Promise<TwitchData.RootChannel | BErrorMsg> {
-    let userData: null | undefined | TwitchData.User = users.get(userName) || null;
+    let userData: null | undefined | TwitchData.User = users.get(userName);
     if (!userData) {
       userData = await this.getUserData(userName);
     }

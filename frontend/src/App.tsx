@@ -3,10 +3,11 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Theme } from "./theme";
 
 import TData from "./stores/tdata";
+import RecentStore from "./stores/recently";
 
 import Nav from "./components/Navbar/nav";
 import Results from "./components/Results/results";
-import RecentlySearch from "./components/Recently_Searched/rs";
+import RecentSearches from "./components/Recently_Searched/recents";
 
 import "antd/dist/antd.css";
 import "./App.scss";
@@ -24,6 +25,7 @@ const Container = styled.div`
 `;
 function App() {
   const tData = new TData();
+  const rs = new RecentStore();
   return (
     <div className="App">
       <BrowserRouter>
@@ -31,7 +33,7 @@ function App() {
         <Switch>
           <Container>
             <Route path="/:user" render={() => <Results tData={tData} />} />
-            <Route exact path="/" component={RecentlySearch} />
+            <Route exact path="/" render={() => <RecentSearches rs={rs} />} />
           </Container>
         </Switch>
       </BrowserRouter>

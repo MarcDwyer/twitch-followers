@@ -1,9 +1,12 @@
-import React from "react";
+import { observer } from "mobx-react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+import RecentlySearched from "../../stores/recently";
+
 import { Theme } from "../../theme";
-import "./rs.scss";
+import "./recents.scss";
 
 export const RecentLink = styled(Link)`
   display: flex;
@@ -22,27 +25,30 @@ export const RecentLink = styled(Link)`
     opacity: 0.75;
   }
 `;
-const topStreams: string[] = ["ninja", "xqcow", "pokimane"];
 
-const RS = () => {
+type Props = {
+  rs: RecentlySearched;
+};
+const RecentSearches = observer(({ rs }: Props) => {
+  console.log(rs.isMock);
+  const recents = Object.keys(rs.recents);
+  useEffect(() => {
+    rs.fetchRecents();
+  }, []);
   return (
     <div
       className="main-recently"
       style={{ backgroundColor: ` ${Theme.lightShade}` }}
     >
-      {/* <div className="innerdiv">
+      <div className="innerdiv">
         <h2 style={{ color: Theme.color }}>
-          {recent.length
+          {!rs.isMock
             ? "Your recently searched"
             : "You haven't searched for a user yet maybe try..."}
         </h2>
         <div className="recents">
           {(() => {
-            let result: string[] = topStreams;
-
-            if (recent.length !== 0) result = recent.reverse();
-
-            return result.map((k) => {
+            return recents.map((k) => {
               return (
                 <RecentLink key={k} to={`/${k}`}>
                   <span>{k}</span>
@@ -51,9 +57,9 @@ const RS = () => {
             });
           })()}
         </div>
-      </div> */}
+      </div>
     </div>
   );
-};
+});
 
-export default RS;
+export default RecentSearches;

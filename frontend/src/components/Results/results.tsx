@@ -5,7 +5,6 @@ import TData from "../../stores/tdata";
 
 import Loader from "react-loader-spinner";
 import { useDebouncedCallback } from "use-debounce";
-import { useDispatch, useSelector } from "react-redux";
 
 import { Theme } from "../../theme";
 
@@ -45,6 +44,7 @@ const Results = observer(({ tData }: Props) => {
   }, 250);
 
   useEffect(() => {
+    tData.reset();
     tData.fetchData(user);
   }, [user]);
 

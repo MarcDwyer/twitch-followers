@@ -1,19 +1,17 @@
 import { action, makeAutoObservable, observable } from "mobx";
-import { isReturnStatement } from "typescript";
 import { TwitchData } from "../twitch_types";
+import { setSearch } from "./recently";
 
 export default class TData {
     private offset: number = 0;
     private limit : number | null = null;
-
     private initState: TData;
-
 
     error: TwitchData.ErrorMsg | null = null;
     data: TwitchData.RootChannel | null = null;
 
     constructor() {
-        this.initState = this;
+        this.initState = {...this };
         makeAutoObservable(this)
     }
 
@@ -25,7 +23,6 @@ export default class TData {
             this.offset += this.data.follows.length;
         }
         const url = prefix + `/followers/${user}/${this.offset}`;
-        console.log(url)
         const f = await fetch(url);
         const data: TwitchData.RootChannel = await f.json();
         if ("error" in data) {
@@ -39,6 +36,7 @@ export default class TData {
             this.error = null;
             return;
         }
+        setSearch(user);
         this.error = null
         this.data = data
     }
@@ -47,8 +45,11 @@ export default class TData {
             initState: true
         }
         for (const [k, v] of Object.entries(this.initState)) {
-            //@ts-ignore
-            if (!(k in not)) this[k] = v
+            if (!(k in not)) {
+                console.log(k);
+                //@ts-ignore
+                this[k] = v
+            }
         }
     }
 }
