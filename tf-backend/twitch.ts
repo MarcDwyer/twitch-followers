@@ -15,16 +15,19 @@ export default class Twitch {
   async getFollowers(
     username: string,
     pagination?: string,
-  ): Promise<TwitchLookUp.User[] | BErrorMsg> {
+  ): Promise<TwitchLookUp.MyData | BErrorMsg> {
     const user = await this.getUser(username)
     if ('error' in user) {
       return user;
     }
 
     const follows = await user.getFollowers(pagination);
-    console.log(follows)
     const pkgFollows = await this.packageFollowers(follows);
-    return pkgFollows;
+    return {
+      cursor: follows.pagination.cursor,
+      follows: pkgFollows,
+      _total: follows.total,
+    };
   }
   async getUser(username: string): Promise<TwitchUser | BErrorMsg> {
     username = username.toLowerCase();
@@ -45,8 +48,7 @@ export default class Twitch {
         const user = await this.getUser(follower.to_name.toLowerCase());
         if ('error' in user) throw user;
         if (user && user.userData) {
-          console.log(`pushed: ${user.userData.login}`)
-          pkgFollows.push(user.userData);
+          pkgFollows.push({...user.userData, followed_at: follower.followed_at });
         }
       } catch(e) {
         console.error(`error: ${follower.to_name}`)
@@ -56,8 +58,3 @@ export default class Twitch {
   }
 
 }
-
-// https://api.twitch.tv/helix/streams?user_login=
-
-// GET https://api.twitch.tv/helix/users/follows?from_id=<user ID>
-// GET https://api.twitch.tv/helix/users/follows?to_id=<user ID>

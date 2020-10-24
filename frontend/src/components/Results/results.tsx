@@ -91,8 +91,9 @@ const Results = observer(({ tData }: Props) => {
       resRef.current?.removeEventListener("scroll", paginate);
     };
   }, [resRef]);
-
-  console.log(data);
+  if (data) {
+    console.log({ len: data?.follows.length, t: data._total });
+  }
   return (
     <div className="main-results" ref={resRef}>
       {user && !data && !error && (
@@ -114,13 +115,12 @@ const Results = observer(({ tData }: Props) => {
       {data && (
         <React.Fragment>
           <h1>
-            {user} follows {data.data.length} streams
+            {user} follows {data._total} streams
           </h1>
           <div className="inner-results">
             <div className="result-grid">
-              {data.data.map((daum) => {
-                console.log(JSON.stringify(daum));
-                return <Card key={daum.to_id} daum={daum} />;
+              {data.follows.map((follow) => {
+                return <Card key={follow.id} follow={follow} />;
               })}
             </div>
           </div>

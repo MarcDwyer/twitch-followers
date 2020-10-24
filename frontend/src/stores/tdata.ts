@@ -1,12 +1,13 @@
 import {  makeAutoObservable } from "mobx";
-import { TwitchFollowers, ErrorMsg } from "../twitch_types";
+import { ErrorMsg, TwitchLookUp } from "../twitch_types";
 import { setSearch } from "./recently";
 
 export default class TData {
     private initState: TData;
     
     error: ErrorMsg | null = null;
-    data: TwitchFollowers.RootFollowers | null = null;
+    data: TwitchLookUp.MyData | null = null;
+    done: boolean = false;
 
     constructor() {
         this.initState = {...this };
@@ -16,20 +17,21 @@ export default class TData {
      fetchData = async (user: string) =>  {
         const prefix = process.env.NODE_ENV === "development" ? `` : `https://${document.location.hostname}`;
 
-        let url = prefix + `/followers/${user}/${this.data?.pagination || "none"}`;
-        
+        let url = prefix + `/followers/${user}/${this.data?.cursor || "none"}`;
+        console.log(url)
         try {
             const f = await fetch(url);
             if (!f.ok) {
                 throw { error: "Server Error"};
             }
-            const newFData: TwitchFollowers.RootFollowers = await f.json();
+            const newFData: TwitchLookUp.MyData = await f.json();
             if ("error" in newFData) throw newFData;
             if (this.data) {
-                const dataCopy = {...this.data};
-                dataCopy.data = [...dataCopy.data, ...newFData.data]
+                if (this.done) return;
+                const newData = {cursor: newFData.cursor, follows: [...this.data.follows, ...newFData.follows]};
+                this.done = newFData.cursor === undefined;
                 this.error = null;
-                this.data = dataCopy;
+                this.data = {...this.data, ...newData};
                 return;
             }
             setSearch(user);

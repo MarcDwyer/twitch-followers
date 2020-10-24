@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import "./card.scss";
-import { TwitchFollowers } from "../../twitch_types";
+import { TwitchFollowers, TwitchLookUp } from "../../twitch_types";
 
 export const AnchorLink = styled.a`
   width: 100%;
@@ -35,15 +35,13 @@ export const MyLink = styled(Link)`
   }
 `;
 type Props = {
-  daum: TwitchFollowers.Daum;
+  follow: TwitchLookUp.User;
 };
 // https://static-cdn.jtvnw.net/jtv_user_pictures/7e560345-d4e9-47d6-8020-15108bfddcaa-profile_image-300x300.png
 
-const Card = ({ daum }: Props) => {
-  const date = new Date(daum.followed_at);
+const Card = ({ follow }: Props) => {
+  const date = new Date(follow.followed_at);
 
-  const logo = `https://static-cdn.jtvnw.net/jtv_user_pictures/${daum.to_name}-profile_image-300x300.png`;
-  console.log(logo);
   return (
     <div
       className="card"
@@ -52,19 +50,19 @@ const Card = ({ daum }: Props) => {
         backgroundColor: Theme.shadeColor,
       }}
     >
-      {daum.to_name}
-      <img src={logo} alt="yes" />
+      {follow.display_name}
+      <img src={follow.profile_image_url} alt="yes" />
       <div className="info">
-        {/* <span className="display-name">{channel.display_name}</span>
+        <span className="display-name">{follow.display_name}</span>
         <span>Followed on: {date.toDateString()}</span>
-        <MyLink to={`/${channel.name}`}>View Followers</MyLink>
+        <MyLink to={`/${follow.login}`}>View Followers</MyLink>
         <AnchorLink
-          href={channel.url}
+          href={`https://twitch.tv/${follow.login}`}
           target="_blank"
           rel="noopener noreferrer"
         >
           Visit channel
-        </AnchorLink> */}
+        </AnchorLink>
       </div>
     </div>
   );

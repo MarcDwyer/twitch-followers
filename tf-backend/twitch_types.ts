@@ -13,6 +13,13 @@ export declare module TwitchLookUp {
     profile_image_url: string;
     offline_image_url: string;
     view_count: number;
+    followed_at: string;
+  }
+  
+  export interface MyData {
+    cursor: string;
+    _total: number;
+    follows: User[];
   }
 }
 export declare module TwitchFollowers {

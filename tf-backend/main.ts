@@ -1,5 +1,4 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 import Twitch from "./twitch.ts";
 
@@ -21,8 +20,8 @@ router.get("/followers/:user/:pagination", async (ctx) => {
   if (pagination === "none") {
     pagination = undefined
   }
+  console.log({user, pagination})
   const fd = await twitch.getFollowers(user, pagination);
-  console.log('fd')
   ctx.response.body = fd; 
 })
 router.allowedMethods({})
