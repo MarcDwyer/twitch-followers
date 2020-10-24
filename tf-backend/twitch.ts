@@ -4,7 +4,7 @@ import TwitchUser from "./twitch_user.ts";
 export type BErrorMsg = {
   error: string;
 };
-export type UsersMap = Map<string,  >
+export type UsersMap = Map<string, TwitchUser>
 
 export default class Twitch {
   private users: UsersMap = new Map();
