@@ -42,3 +42,12 @@ export const checkDupes = (followers: FTwitchData.ChannelData[]) => {
   }
   return results;
 };
+
+
+export function delay(ms: number): Promise<void> {
+  return new Promise((res): number =>
+    setTimeout((): void => {
+      res();
+    }, ms)
+  );
+}

@@ -30,7 +30,6 @@ type Props = {
   rs: RecentlySearched;
 };
 const RecentSearches = observer(({ rs }: Props) => {
-  console.log(rs.isMock);
   const recents = Object.keys(rs.recents);
   useEffect(() => {
     rs.fetchRecents();

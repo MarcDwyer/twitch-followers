@@ -6,7 +6,8 @@ export const fetchTwitch = async (
     const f = await fetch(url, {
       //@ts-ignore
       headers: {
-        "Accept": "application/vnd.twitchtv.v5+json",
+        // "Accept": "application/vnd.twitchtv.v5+json",
+        "Authorization": `Bearer ${Deno.env.get("OAUTH")}`,
         "Client-ID": client_id,
       },
     });

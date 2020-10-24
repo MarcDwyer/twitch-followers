@@ -1,48 +1,63 @@
-import { TwitchData } from "./twitch_types.ts";
-import { fetchTwitch } from "./util.ts";
+import { TwitchFollowers, TwitchLookUp } from "./twitch_types.ts";
+import TwitchUser from "./twitch_user.ts";
 
 export type BErrorMsg = {
   error: string;
 };
-const twitchKey = () => {
-  const key = Deno.env.get("CLIENTID");
-  if (!key) {
-    throw new Error("No Twitch key was found");
-  }
-  return key;
-};
-
-const users = new Map<string, TwitchData.User>();
+export type UsersMap = Map<string,  >
 
 export default class Twitch {
-  private key = twitchKey();
+  private users: UsersMap = new Map();
+
   constructor(
     public limit: number,
   ) {}
   async getFollowers(
-    userName: string,
-    offset: number | string,
-  ): Promise<TwitchData.RootChannel | BErrorMsg> {
-    let userData: null | undefined | TwitchData.User = users.get(userName);
-    if (!userData) {
-      userData = await this.getUserData(userName);
+    username: string,
+    pagination?: string,
+  ): Promise<TwitchLookUp.User[] | BErrorMsg> {
+    const user = await this.getUser(username)
+    if ('error' in user) {
+      return user;
     }
-    if (!userData) {
+
+    const follows = await user.getFollowers(pagination);
+    console.log(follows)
+    const pkgFollows = await this.packageFollowers(follows);
+    return pkgFollows;
+  }
+  async getUser(username: string): Promise<TwitchUser | BErrorMsg> {
+    username = username.toLowerCase();
+    let user: null | undefined | TwitchUser = this.users.get(username);
+    if (!user) {
+        await new TwitchUser(username, this.users).getUserData();   
+        user = this.users.get(username);   
+    }
+    if (!user) {
       return { error: "No results were found" };
     }
-    const url =
-      `https://api.twitch.tv/kraken/users/${userData._id}/follows/channels?offset=${offset}&limit=${this.limit}&sortby=last_broadcast`;
-        console.log(url)
-    const followerData = await fetchTwitch(url, this.key);
-    return { ...followerData, viewing: userData };
+    return user;
   }
-  private async getUserData(userName: string): Promise<TwitchData.User | null> {
-    const url = `https://api.twitch.tv/kraken/users?login=${userName}`;
-    const data: TwitchData.RootUser = await fetchTwitch(url, this.key);
-    if (!data || data && !data.users.length) {
-      return null;
+  private async packageFollowers(f: TwitchFollowers.RootFollowers) {
+    const pkgFollows: TwitchLookUp.User[] = [];
+    for (const follower of f.data) {
+      try {
+        const user = await this.getUser(follower.to_name.toLowerCase());
+        if ('error' in user) throw user;
+        if (user && user.userData) {
+          console.log(`pushed: ${user.userData.login}`)
+          pkgFollows.push(user.userData);
+        }
+      } catch(e) {
+        console.error(`error: ${follower.to_name}`)
+      }
     }
-    const userData = data.users[0];
-    return userData;
+    return pkgFollows;
   }
+
 }
+
+// https://api.twitch.tv/helix/streams?user_login=
+
+// GET https://api.twitch.tv/helix/users/follows?from_id=<user ID>
+// GET https://api.twitch.tv/helix/users/follows?to_id=<user ID>

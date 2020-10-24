@@ -3,14 +3,10 @@ import { FTwitchData } from "../../types";
 
 import { Theme } from "../../theme";
 import styled from "styled-components";
-
-import "./card.scss";
 import { Link } from "react-router-dom";
 
-type Props = {
-  channel: FTwitchData.Channel;
-  created_at: Date;
-};
+import "./card.scss";
+import { TwitchFollowers } from "../../twitch_types";
 
 export const AnchorLink = styled.a`
   width: 100%;
@@ -38,18 +34,28 @@ export const MyLink = styled(Link)`
     opacity: 0.65;
   }
 `;
+type Props = {
+  daum: TwitchFollowers.Daum;
+};
+// https://static-cdn.jtvnw.net/jtv_user_pictures/7e560345-d4e9-47d6-8020-15108bfddcaa-profile_image-300x300.png
 
-const Card = (props: Props) => {
-  const { channel, created_at } = props;
-  const date = new Date(created_at);
+const Card = ({ daum }: Props) => {
+  const date = new Date(daum.followed_at);
+
+  const logo = `https://static-cdn.jtvnw.net/jtv_user_pictures/${daum.to_name}-profile_image-300x300.png`;
+  console.log(logo);
   return (
     <div
       className="card"
-      style={{ color: Theme.color, backgroundColor: Theme.shadeColor }}
+      style={{
+        color: Theme.color,
+        backgroundColor: Theme.shadeColor,
+      }}
     >
-      <img src={channel.logo} alt="yes" />
+      {daum.to_name}
+      <img src={logo} alt="yes" />
       <div className="info">
-        <span className="display-name">{channel.display_name}</span>
+        {/* <span className="display-name">{channel.display_name}</span>
         <span>Followed on: {date.toDateString()}</span>
         <MyLink to={`/${channel.name}`}>View Followers</MyLink>
         <AnchorLink
@@ -58,7 +64,7 @@ const Card = (props: Props) => {
           rel="noopener noreferrer"
         >
           Visit channel
-        </AnchorLink>
+        </AnchorLink> */}
       </div>
     </div>
   );

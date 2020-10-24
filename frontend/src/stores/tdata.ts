@@ -1,14 +1,12 @@
-import { action, makeAutoObservable, observable } from "mobx";
-import { TwitchData } from "../twitch_types";
+import {  makeAutoObservable } from "mobx";
+import { TwitchFollowers, ErrorMsg } from "../twitch_types";
 import { setSearch } from "./recently";
 
 export default class TData {
-    private offset: number = 0;
-    private limit : number | null = null;
     private initState: TData;
-
-    error: TwitchData.ErrorMsg | null = null;
-    data: TwitchData.RootChannel | null = null;
+    
+    error: ErrorMsg | null = null;
+    data: TwitchFollowers.RootFollowers | null = null;
 
     constructor() {
         this.initState = {...this };
@@ -17,28 +15,30 @@ export default class TData {
 
      fetchData = async (user: string) =>  {
         const prefix = process.env.NODE_ENV === "development" ? `` : `https://${document.location.hostname}`;
-        const sameSearch = this.data && !("error" in this.data)
-        if (sameSearch) {
-            //@ts-ignore
-            this.offset += this.data.follows.length;
+
+        let url = prefix + `/followers/${user}/${this.data?.pagination || "none"}`;
+        
+        try {
+            const f = await fetch(url);
+            if (!f.ok) {
+                throw { error: "Server Error"};
+            }
+            const newFData: TwitchFollowers.RootFollowers = await f.json();
+            if ("error" in newFData) throw newFData;
+            if (this.data) {
+                const dataCopy = {...this.data};
+                dataCopy.data = [...dataCopy.data, ...newFData.data]
+                this.error = null;
+                this.data = dataCopy;
+                return;
+            }
+            setSearch(user);
+            this.error = null
+            this.data = newFData;
+        }catch (e) {
+            this.error = e;
         }
-        const url = prefix + `/followers/${user}/${this.offset}`;
-        const f = await fetch(url);
-        const data: TwitchData.RootChannel = await f.json();
-        if ("error" in data) {
-            this.error = data;
-            return
-        }
-        if (this.data) {
-            const {follows} = this.data;
-            console.log(data.follows[0])
-            this.data.follows = [...follows, ...data.follows]
-            this.error = null;
-            return;
-        }
-        setSearch(user);
-        this.error = null
-        this.data = data
+
     }
     reset() {
         const not = {

@@ -2,9 +2,10 @@ import React, { useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import TData from "../../stores/tdata";
+import { useDebouncedCallback } from "use-debounce";
+import { useChain, useSpring, useTransition } from "react-spring";
 
 import Loader from "react-loader-spinner";
-import { useDebouncedCallback } from "use-debounce";
 
 import { Theme } from "../../theme";
 
@@ -12,6 +13,7 @@ import Card from "../Card/card";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./results.scss";
+import { TwitchFollowers } from "../../twitch_types";
 
 type Props = {
   tData: TData;
@@ -21,6 +23,37 @@ const Results = observer(({ tData }: Props) => {
 
   //@ts-ignore
   const { user } = useParams();
+
+  // const springRef = useRef<any>();
+  // //@ts-ignore
+  // const spring = useSpring({
+  //   ref: springRef,
+  //   to: {
+  //     opacity: 1,
+  //   },
+  //   from: {
+  //     opacity: 0,
+  //   },
+  //   config: {
+  //     tension: 250,
+  //   },
+  // });
+  // const len = data?.follows.length || 0;
+
+  // const trailRef = useRef<any>();
+  // const trans = useTransition(
+  //   data ? data.follows : [],
+  //   (follow: TwitchData.User) => follow._id,
+  //   {
+  //     //@ts-ignore
+  //     ref: trailRef,
+  //     from: { transform: "translateX(-100%)" },
+  //     trail: 400 / len,
+  //     enter: { opacity: 1, transform: "scale(1)" },
+  //     leave: { opacity: 0, transform: "translateX(0%)" },
+  //   }
+  // );
+  // useChain([springRef, trailRef]);
 
   const resRef = useRef<HTMLDivElement | null>(null);
   const didScrollBottom = () => {
@@ -81,14 +114,13 @@ const Results = observer(({ tData }: Props) => {
       {data && (
         <React.Fragment>
           <h1>
-            {user} follows {data._total} streams
+            {user} follows {data.data.length} streams
           </h1>
           <div className="inner-results">
             <div className="result-grid">
-              {data.follows.map(({ channel, created_at }, i) => {
-                return (
-                  <Card key={i} channel={channel} created_at={created_at} />
-                );
+              {data.data.map((daum) => {
+                console.log(JSON.stringify(daum));
+                return <Card key={daum.to_id} daum={daum} />;
               })}
             </div>
           </div>
