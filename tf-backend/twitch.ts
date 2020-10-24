@@ -20,8 +20,9 @@ export default class Twitch {
     if ('error' in user) {
       return user;
     }
-
+    console.log(user)
     const follows = await user.getFollowers(pagination);
+    console.log(follows)
     const pkgFollows = await this.packageFollowers(follows);
     return {
       cursor: follows.pagination.cursor,

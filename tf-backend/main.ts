@@ -22,7 +22,6 @@ router.get("/followers/:user/:pagination", async (ctx) => {
   }
   console.log({user, pagination})
   const fd = await twitch.getFollowers(user, pagination);
-  console.log(fd);
   ctx.response.body = fd; 
 })
 router.allowedMethods({})
