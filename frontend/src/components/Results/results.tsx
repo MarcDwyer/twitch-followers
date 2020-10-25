@@ -68,7 +68,7 @@ const Results = observer(({ tData }: Props) => {
       isBottom &&
       tData &&
       tData.data &&
-      tData.data?.follows.length >= tData.data?._total
+      tData.data?.follows.length < tData.data?._total
     ) {
       console.log("fetching new data");
       tData.fetchData(user);

@@ -51,7 +51,6 @@ const Card = ({ follow }: Props) => {
       <div className="inner-card">
         {!("error" in follow) &&
           (() => {
-            console.log(follow.followed_at);
             const date = new Date(follow.followed_at);
             return (
               <>

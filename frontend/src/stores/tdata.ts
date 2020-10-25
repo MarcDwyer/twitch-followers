@@ -20,6 +20,7 @@ export default class TData {
         const prefix = process.env.NODE_ENV === "development" ? `` : `https://${document.location.hostname}`;
         let url = prefix + `/followers/${user}/${this.data?.cursor || "none"}`;
         try {
+            console.log(`fetching: ${url}`)
             const f = await fetch(url);
             if (!f.ok) {
                 throw { error: "Server Error"};
