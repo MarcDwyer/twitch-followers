@@ -2,4 +2,29 @@
   display: flex;
   width: 100%;
   height: 75px;
+
+  .search-loader {
+    margin: auto;
+    width: 50%;
+    display: flex;
+    height: 80%;
+
+    .loader {
+      width: 8%;
+      height: 100%;
+      margin: auto 5px auto auto;
+      display: flex;
+      * {
+        height: 100%;
+        width: 100%;
+        margin: auto;
+      }
+    }
+
+    .search {
+      margin: auto;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }

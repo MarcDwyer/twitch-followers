@@ -15,10 +15,14 @@ export declare module TwitchLookUp {
     view_count: number;
     followed_at: string;
   }
+
+  export type ResolvedList = Array<TwitchLookUp.User | ErrorMsg>;
+
   export interface MyData {
     cursor: string;
     _total: number;
-    follows: User[];
+    follows: ResolvedList;
+    viewing: User;
   }
 }
 export declare module TwitchFollowers {

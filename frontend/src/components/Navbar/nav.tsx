@@ -6,6 +6,9 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import "./nav.scss";
+import { observer } from "mobx-react-lite";
+import Loader from "react-loader-spinner";
+import TData from "../../stores/tdata";
 
 const HomeBtn = styled(FaHome)`
   font-size: 33px;
@@ -16,15 +19,29 @@ const HomeBtn = styled(FaHome)`
   top: 20px;
 `;
 
-const Nav = () => {
+type Props = {
+  tData: TData;
+};
+const Nav = observer(({ tData }: Props) => {
   const history = useHistory();
-
   return (
     <div className="nav" style={{ backgroundColor: Theme.shadeColor }}>
       <HomeBtn onClick={() => history.push("/")} />
-      <Search />
+      <div className="search-loader">
+        <div className="loader">
+          {tData.isLoading && (
+            <Loader
+              type="Puff"
+              color={Theme.reallyLight}
+              height={25}
+              width={25}
+            />
+          )}
+        </div>
+        <Search />
+      </div>
     </div>
   );
-};
+});
 
 export default Nav;

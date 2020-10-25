@@ -1,3 +1,5 @@
+import { ResolvedList } from "./follower_handler.ts";
+
 export declare module TwitchLookUp {
   export interface RootLookUp {
     data: User[];
@@ -19,7 +21,8 @@ export declare module TwitchLookUp {
   export interface MyData {
     cursor: string;
     _total: number;
-    follows: User[];
+    follows: ResolvedList;
+    viewing: User;
   }
 }
 export declare module TwitchFollowers {

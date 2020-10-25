@@ -5,6 +5,7 @@ import { setSearch } from "./recently";
 export default class TData {
     private initState: TData;
     
+    isLoading: boolean = false;
     error: ErrorMsg | null = null;
     data: TwitchLookUp.MyData | null = null;
     done: boolean = false;
@@ -14,11 +15,10 @@ export default class TData {
         makeAutoObservable(this)
     }
 
-     fetchData = async (user: string) =>  {
+     async fetchData(user: string)  {
+        this.isLoading = true;
         const prefix = process.env.NODE_ENV === "development" ? `` : `https://${document.location.hostname}`;
-
         let url = prefix + `/followers/${user}/${this.data?.cursor || "none"}`;
-        console.log(url)
         try {
             const f = await fetch(url);
             if (!f.ok) {
@@ -39,6 +39,8 @@ export default class TData {
             this.data = newFData;
         }catch (e) {
             this.error = e;
+        } finally {
+            this.isLoading = false
         }
 
     }
@@ -47,8 +49,7 @@ export default class TData {
             initState: true
         }
         for (const [k, v] of Object.entries(this.initState)) {
-            if (!(k in not)) {
-                console.log(k);
+            if (!(k in not) && typeof v !== 'function') {
                 //@ts-ignore
                 this[k] = v
             }

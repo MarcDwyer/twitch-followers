@@ -1,6 +1,6 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 
-import Twitch from "./twitch.ts";
+import Twitch from "./twitch_hub.ts";
 
 
 const port = 1337;
@@ -12,16 +12,15 @@ const router = new Router();
 
 // const txtDecoder = new TextDecoder();
 
-router.get("/followers/:user/:pagination", async (ctx) => {
+router.get("/followers/:user/:cursor", async (ctx) => {
   const { user } = ctx.params;
-  let pagination = ctx.params.pagination;
+  let cursor = ctx.params.cursor;
 
   if (!user) return;
-  if (pagination === "none") {
-    pagination = undefined
+  if (cursor === "none") {
+    cursor = undefined
   }
-  console.log({user, pagination})
-  const fd = await twitch.getFollowers(user, pagination);
+  const fd = await twitch.getData(user, cursor);
   ctx.response.body = fd; 
 })
 router.allowedMethods({})

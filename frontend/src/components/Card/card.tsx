@@ -1,12 +1,12 @@
 import React from "react";
-import { FTwitchData } from "../../types";
 
 import { Theme } from "../../theme";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import "./card.scss";
-import { TwitchFollowers, TwitchLookUp } from "../../twitch_types";
+import { TwitchLookUp } from "../../twitch_types";
+import { ErrorMsg } from "../../types";
 
 export const AnchorLink = styled.a`
   width: 100%;
@@ -28,6 +28,7 @@ export const MyLink = styled(Link)`
   text-align: center;
   color: ${Theme.color};
   padding: 5px 5px;
+  margin-top: 10px;
 
   &:hover {
     color: inherit;
@@ -35,13 +36,10 @@ export const MyLink = styled(Link)`
   }
 `;
 type Props = {
-  follow: TwitchLookUp.User;
+  follow: TwitchLookUp.User | ErrorMsg;
 };
-// https://static-cdn.jtvnw.net/jtv_user_pictures/7e560345-d4e9-47d6-8020-15108bfddcaa-profile_image-300x300.png
 
 const Card = ({ follow }: Props) => {
-  const date = new Date(follow.followed_at);
-
   return (
     <div
       className="card"
@@ -50,19 +48,30 @@ const Card = ({ follow }: Props) => {
         backgroundColor: Theme.shadeColor,
       }}
     >
-      {follow.display_name}
-      <img src={follow.profile_image_url} alt="yes" />
-      <div className="info">
-        <span className="display-name">{follow.display_name}</span>
-        <span>Followed on: {date.toDateString()}</span>
-        <MyLink to={`/${follow.login}`}>View Followers</MyLink>
-        <AnchorLink
-          href={`https://twitch.tv/${follow.login}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Visit channel
-        </AnchorLink>
+      <div className="inner-card">
+        {!("error" in follow) &&
+          (() => {
+            console.log(follow.followed_at);
+            const date = new Date(follow.followed_at);
+            return (
+              <>
+                <img src={follow.profile_image_url} alt="yes" />
+                <div className="info">
+                  <span className="display-name">{follow.display_name}</span>
+                  <span>Followed on: {date.toDateString()}</span>
+                  <MyLink to={`/${follow.login}`}>View Followers</MyLink>
+                  <AnchorLink
+                    href={`https://twitch.tv/${follow.login}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit channel
+                  </AnchorLink>
+                </div>
+              </>
+            );
+          })()}
+        {"error" in follow && <span className="error-msg">{follow.error}</span>}
       </div>
     </div>
   );

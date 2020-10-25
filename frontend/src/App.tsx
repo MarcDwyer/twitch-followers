@@ -29,7 +29,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Nav />
+        <Nav tData={tData} />
         <Switch>
           <Container>
             <Route path="/:user" render={() => <Results tData={tData} />} />
