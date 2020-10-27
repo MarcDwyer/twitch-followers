@@ -1,8 +1,7 @@
-import { resolve } from "https://deno.land/std@0.73.0/path/win32.ts";
 import FetchMethods from "./fetch_methods.ts";
 import FollowerHandler from "./follower_handler.ts";
-import { fetchTwitch, trimAndLower } from "./my_util.ts";
-import { TwitchFollowers, TwitchLookUp } from "./twitch_types.ts";
+import { trimAndLower } from "./my_util.ts";
+import { TwitchLookUp } from "./twitch_types.ts";
 
 export type BErrorMsg = {
   error: string;
@@ -10,7 +9,7 @@ export type BErrorMsg = {
 export type UsersMap = Map<string, TwitchLookUp.User | BErrorMsg>
 
 
-export default class Twitch {
+export default class TwitchHub {
   private users: UsersMap = new Map();
 
   constructor(
@@ -25,7 +24,7 @@ export default class Twitch {
       return user;
     }
     const follows = await FetchMethods.fetchFollowers(user, cursor);
-    const resolvedList = await new FollowerHandler(follows, this.users).resolverFollowers();
+    const resolvedList = await new FollowerHandler(follows, this.users).resolveFollowers();
     return {
       cursor: follows.pagination.cursor,
       //@ts-ignore
@@ -34,20 +33,21 @@ export default class Twitch {
       viewing: user,
     };
   }
+  // Get user if exists in Users Map if not fetch the user and cache it for future use
   async getUser(username: string): Promise<TwitchLookUp.User | BErrorMsg> {
     username = trimAndLower(username);
     let user = this.users.get(username);
-    const errorMsg = {error: "No results found"} 
     if (!user) {
         const isSet = await this.createUser(username);  
-        if (!isSet) return errorMsg
+        if (!isSet) return {error: `Could not find ${username}`}
         user = this.users.get(username);   
     }
     if (!user) {
-      return errorMsg
+      return {error: `Error retrieving ${username}`}
     }
     return user;
   }
+  // Fetches and caches user
   async createUser(username: string): Promise<boolean> {
     const user = await FetchMethods.fetchUsers(`?login=${username}`);
     if ('error' in user) return false;
