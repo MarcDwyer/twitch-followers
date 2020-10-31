@@ -3,6 +3,7 @@ import React from "react";
 import { Theme } from "../../theme";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { a } from "react-spring";
 
 import "./card.scss";
 import { TwitchLookUp } from "../../twitch_types";
@@ -37,15 +38,17 @@ export const MyLink = styled(Link)`
 `;
 type Props = {
   follow: TwitchLookUp.User | ErrorMsg;
+  style: any;
 };
 
-const Card = ({ follow }: Props) => {
+const Card = ({ follow, style }: Props) => {
   return (
-    <div
+    <a.div
       className="card"
       style={{
         color: Theme.color,
         backgroundColor: Theme.shadeColor,
+        ...style,
       }}
     >
       <div className="inner-card">
@@ -72,7 +75,7 @@ const Card = ({ follow }: Props) => {
           })()}
         {"error" in follow && <span className="error-msg">{follow.error}</span>}
       </div>
-    </div>
+    </a.div>
   );
 };
 

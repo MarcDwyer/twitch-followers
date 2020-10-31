@@ -1,4 +1,4 @@
-import {  makeAutoObservable } from "mobx";
+import {  action, makeAutoObservable } from "mobx";
 import { ErrorMsg, TwitchLookUp } from "../twitch_types";
 import { setSearch } from "./recently";
 
@@ -14,7 +14,7 @@ export default class TData {
         this.initState = {...this };
         makeAutoObservable(this)
     }
-
+    @action
      async fetchData(user: string)  {
         this.isLoading = true;
         const prefix = process.env.NODE_ENV === "development" ? `` : `https://${document.location.hostname}`;
@@ -44,6 +44,7 @@ export default class TData {
         }
 
     }
+    @action
     reset() {
         const not = {
             initState: true

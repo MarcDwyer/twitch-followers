@@ -1,6 +1,6 @@
-import { FollowerPosition } from "./follower_handler.ts";
+import { NotFound } from "./follower_handler.ts";
 
-export function makeUsersQuery(follows: FollowerPosition): string {
+export function makeUsersQuery(follows: NotFound): string {
     const prefix = "?id="
     let params = "";
     for (const follow of follows.values()) {

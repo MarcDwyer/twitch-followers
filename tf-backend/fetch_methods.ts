@@ -2,7 +2,6 @@ import { fetchTwitch } from "./my_util.ts";
 import { BErrorMsg } from "./twitch_hub.ts";
 import { TwitchLookUp, TwitchFollowers } from "./twitch_types.ts";
 
-//cannot find id 
 export default class FetchMethods { 
     static limit = 55;
     static async fetchUsers(query: string): Promise<TwitchLookUp.RootLookUp | BErrorMsg> {

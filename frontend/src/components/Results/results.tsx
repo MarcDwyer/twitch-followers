@@ -8,6 +8,8 @@ import Card from "../Card/card";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./results.scss";
+import { useTransition, animated, useChain, a } from "react-spring";
+import { TwitchLookUp } from "../../twitch_types";
 
 type Props = {
   tData: TData;
@@ -18,37 +20,21 @@ const Results = observer(({ tData }: Props) => {
   //@ts-ignore
   const { user } = useParams();
 
-  // const springRef = useRef<any>();
-  // //@ts-ignore
-  // const spring = useSpring({
-  //   ref: springRef,
-  //   to: {
-  //     opacity: 1,
-  //   },
-  //   from: {
-  //     opacity: 0,
-  //   },
-  //   config: {
-  //     tension: 250,
-  //   },
-  // });
-  // const len = data?.follows.length || 0;
+  const len = data?.follows.length || 0;
 
-  // const trailRef = useRef<any>();
-  // const trans = useTransition(
-  //   data ? data.follows : [],
-  //   (follow: TwitchData.User) => follow._id,
-  //   {
-  //     //@ts-ignore
-  //     ref: trailRef,
-  //     from: { transform: "translateX(-100%)" },
-  //     trail: 400 / len,
-  //     enter: { opacity: 1, transform: "scale(1)" },
-  //     leave: { opacity: 0, transform: "translateX(0%)" },
-  //   }
-  // );
-  // useChain([springRef, trailRef]);
-
+  const ref = useRef<any>();
+  console.log(len);
+  const transitions = useTransition(data?.follows || [], {
+    ref,
+    unique: true,
+    trail: 400 / len,
+    from: { opacity: 0, transform: "scale(0)" },
+    enter: { opacity: 1, transform: "scale(1)" },
+    leave: { opacity: 0, transform: "scale(0)" },
+  });
+  const fragment = transitions((style, item, t, i) => {
+    return <Card style={style} follow={item} key={i} />;
+  });
   const resRef = useRef<HTMLDivElement | null>(null);
   const didScrollBottom = () => {
     const { current } = resRef;
@@ -103,11 +89,7 @@ const Results = observer(({ tData }: Props) => {
             {data.viewing.display_name} follows {data._total} streams
           </h1>
           <div className="inner-results">
-            <div className="result-grid">
-              {data.follows.map((follow, i) => {
-                return <Card key={i} follow={follow} />;
-              })}
-            </div>
+            <div className="result-grid">{fragment}</div>
           </div>
         </React.Fragment>
       )}
