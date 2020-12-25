@@ -8,8 +8,7 @@ import Card from "../Card/card";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./results.scss";
-import { useTransition, animated, useChain, a } from "react-spring";
-import { TwitchLookUp } from "../../twitch_types";
+import { useTransition } from "react-spring";
 
 type Props = {
   tData: TData;
