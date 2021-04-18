@@ -42,6 +42,7 @@ export default class TData {
         this.done = newData.cursor === undefined;
         this.error = null;
         this.mergeFollows(newData.follows);
+        this.data.cursor = newData.cursor;
         return;
       }
       setSearch(user);

@@ -41,6 +41,7 @@ export default class API {
       }
       result = data.data[0];
     } catch (e) {
+      console.log(`Couldnt find: ${login}`);
       if (typeof e !== "string") e = JSON.stringify(e);
       result = { error: e };
     }

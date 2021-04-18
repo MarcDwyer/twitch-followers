@@ -1,4 +1,5 @@
 import API from "./api.ts";
+import { trimAndLower } from "./my_util.ts";
 import { BErrorMsg, TwitchFollowers, TwitchLookUp } from "./twitch_types.ts";
 
 export type Credentials = {
@@ -26,7 +27,7 @@ export default class TwitchHub {
   }
 
   async resolveReq({ fData, index, followers }: ResolveReqParams) {
-    const loginName = fData.to_name.toLowerCase();
+    const loginName = trimAndLower(fData.to_name);
     const result = await this.api.getSingleUser(loginName);
     if (!("error" in result)) {
       result.followed_at = fData.followed_at;
