@@ -8,7 +8,6 @@ import Card from "../Card/card";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./results.scss";
-import { useTransition } from "react-spring";
 
 type Props = {
   tData: TData;
@@ -19,21 +18,6 @@ const Results = observer(({ tData }: Props) => {
   //@ts-ignore
   const { user } = useParams();
 
-  const len = data?.follows.length || 0;
-
-  const ref = useRef<any>();
-  console.log(len);
-  const transitions = useTransition(data?.follows || [], {
-    ref,
-    unique: true,
-    trail: 400 / len,
-    from: { opacity: 0, transform: "scale(0)" },
-    enter: { opacity: 1, transform: "scale(1)" },
-    leave: { opacity: 0, transform: "scale(0)" },
-  });
-  const fragment = transitions((style, item, t, i) => {
-    return <Card style={style} follow={item} key={i} />;
-  });
   const resRef = useRef<HTMLDivElement | null>(null);
   const didScrollBottom = () => {
     const { current } = resRef;
@@ -53,16 +37,16 @@ const Results = observer(({ tData }: Props) => {
       isBottom &&
       tData &&
       tData.data &&
-      tData.data?.follows.length < tData.data?._total
+      tData.data?.follows.length < tData.data._total
     ) {
       console.log("fetching new data");
-      tData.fetchData(user);
+      tData.reqData(user);
     }
   }, 250);
 
   useEffect(() => {
     tData.reset();
-    tData.fetchData(user);
+    tData.reqData(user);
   }, [user]);
 
   useEffect(() => {
@@ -82,13 +66,17 @@ const Results = observer(({ tData }: Props) => {
           <h2>{error.error}</h2>
         </div>
       )}
-      {data && data.follows && (
+      {data && data.follows.length && (
         <React.Fragment>
           <h1>
             {data.viewing.display_name} follows {data._total} streams
           </h1>
           <div className="inner-results">
-            <div className="result-grid">{fragment}</div>
+            <div className="result-grid">
+              {data.follows.map((f) => {
+                return <Card follow={f} style={{}} />;
+              })}
+            </div>
           </div>
         </React.Fragment>
       )}

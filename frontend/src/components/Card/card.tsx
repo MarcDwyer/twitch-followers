@@ -38,7 +38,7 @@ export const MyLink = styled(Link)`
 `;
 type Props = {
   follow: TwitchLookUp.User | ErrorMsg;
-  style: any;
+  style: any | undefined;
 };
 
 const Card = ({ follow, style }: Props) => {
@@ -73,7 +73,11 @@ const Card = ({ follow, style }: Props) => {
               </>
             );
           })()}
-        {"error" in follow && <span className="error-msg">{follow.error}</span>}
+        {"error" in follow &&
+          (() => {
+            console.log(JSON.stringify(follow));
+            return <span className="error-msg">{follow.error}</span>;
+          })()}
       </div>
     </a.div>
   );

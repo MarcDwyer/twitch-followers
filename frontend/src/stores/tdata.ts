@@ -14,8 +14,15 @@ export default class TData {
     this.initState = { ...this };
     makeAutoObservable(this);
   }
+
   @action
-  async fetchData(user: string) {
+  mergeFollows(newFollows: TwitchLookUp.ResolvedList) {
+    if (this.data) {
+      this.data.follows = [...this.data.follows, ...newFollows];
+    }
+  }
+  @action
+  async reqData(user: string) {
     this.isLoading = true;
     const prefix =
       process.env.NODE_ENV === "development"
@@ -27,22 +34,19 @@ export default class TData {
       if (!f.ok) {
         throw { error: "Server Error" };
       }
-      const newFData: TwitchLookUp.MyData = await f.json();
-      if ("error" in newFData) throw newFData;
+      const newData: TwitchLookUp.MyData = await f.json();
+      if ("error" in newData) throw newData;
       if (this.data) {
         if (this.done) return;
-        const newData = {
-          cursor: newFData.cursor,
-          follows: [...this.data.follows, ...newFData.follows],
-        };
-        this.done = newFData.cursor === undefined;
+
+        this.done = newData.cursor === undefined;
         this.error = null;
-        this.data = { ...this.data, ...newData };
+        this.mergeFollows(newData.follows);
         return;
       }
       setSearch(user);
       this.error = null;
-      this.data = newFData;
+      this.data = newData;
     } catch (e) {
       this.error = e;
     } finally {

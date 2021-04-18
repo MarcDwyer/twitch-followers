@@ -2,7 +2,7 @@ export declare module TwitchLookUp {
   export interface RootLookUp {
     data: User[];
   }
-  
+
   export interface User {
     id: string;
     login: string;
@@ -31,7 +31,7 @@ export declare module TwitchFollowers {
     data: Daum[];
     pagination: Pagination;
   }
-  
+
   export interface Daum {
     from_id: string;
     from_name: string;
@@ -39,12 +39,17 @@ export declare module TwitchFollowers {
     to_name: string;
     followed_at: string;
   }
-  
+
   export interface Pagination {
     cursor: string;
   }
-} 
+}
 
 export type ErrorMsg = {
   error: string;
-}
+};
+
+export type GeneralData = {
+  user: TwitchLookUp.User;
+  follows: TwitchFollowers.RootFollowers;
+};
