@@ -12,7 +12,7 @@ export type GeneralData = {
   follows: TwitchFollowers.RootFollowers;
 };
 type ResolveReqParams = {
-  login: string;
+  fData: TwitchFollowers.Daum;
   index: number;
   followers: TwitchLookUp.FollowsArray;
 };
@@ -25,11 +25,12 @@ export default class TwitchHub {
     this.api = new API(creds);
   }
 
-  async resolveReq({ login, index, followers }: ResolveReqParams) {
-    const loginName = login.toLowerCase();
+  async resolveReq({ fData, index, followers }: ResolveReqParams) {
+    const loginName = fData.to_name.toLowerCase();
     const result = await this.api.getSingleUser(loginName);
-
-    this.cache.set(loginName, result);
+    if (!("error" in result)) {
+      result.followed_at = fData.followed_at;
+    }
     followers[index] = result;
   }
   async getFollowerProfiles(
@@ -46,7 +47,7 @@ export default class TwitchHub {
         followers[index] = cache;
         return;
       }
-      resolve.push(this.resolveReq({ login, index, followers }));
+      resolve.push(this.resolveReq({ fData: follow, index, followers }));
     });
     await Promise.all(resolve);
     return followers;
