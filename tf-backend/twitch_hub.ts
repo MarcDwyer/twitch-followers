@@ -70,8 +70,7 @@ export default class TwitchHub {
         _total: follows.total,
       };
     } catch (e) {
-      let err = typeof e === "string" ? e : JSON.stringify(e);
-      return { error: err };
+      return e;
     }
   }
 }

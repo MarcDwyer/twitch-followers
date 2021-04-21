@@ -75,7 +75,7 @@ const Card = ({ follow, style }: Props) => {
           })()}
         {"error" in follow &&
           (() => {
-            console.log(JSON.stringify(follow));
+            console.log(follow);
             return <span className="error-msg">{follow.error}</span>;
           })()}
       </div>

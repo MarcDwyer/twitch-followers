@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from "mobx";
+import { action, computed, makeAutoObservable } from "mobx";
 import { ErrorMsg, TwitchLookUp } from "../twitch_types";
 import { setSearch } from "./recently";
 
@@ -21,6 +21,11 @@ export default class TData {
       this.data.follows = [...this.data.follows, ...newFollows];
     }
   }
+  @computed
+  get isDone() {
+    if (!this.data) return false;
+    return this.data.follows.length >= this.data._total;
+  }
   @action
   async reqData(user: string) {
     this.isLoading = true;
@@ -37,9 +42,7 @@ export default class TData {
       const newData: TwitchLookUp.MyData = await f.json();
       if ("error" in newData) throw newData;
       if (this.data) {
-        if (this.done) return;
-
-        this.done = newData.cursor === undefined;
+        if (this.isDone) return;
         this.error = null;
         this.mergeFollows(newData.follows);
         this.data.cursor = newData.cursor;
@@ -49,6 +52,7 @@ export default class TData {
       this.error = null;
       this.data = newData;
     } catch (e) {
+      console.log(e);
       this.error = e;
     } finally {
       this.isLoading = false;
@@ -58,6 +62,7 @@ export default class TData {
   reset() {
     const not = {
       initState: true,
+      isDone: true,
     };
     for (const [k, v] of Object.entries(this.initState)) {
       if (!(k in not) && typeof v !== "function") {
