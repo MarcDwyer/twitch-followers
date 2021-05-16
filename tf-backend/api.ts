@@ -36,7 +36,6 @@ export default class API {
     let result: TwitchLookUp.User | BErrorMsg;
     try {
       const test = this.english.test(login);
-      console.log(`${login}: ${test}`);
       if (!test) throw "Only accept queries in english";
       const data = await this.fetchTwitch<TwitchLookUp.RootLookUp>(url);
       if (!data || (data.data && !data.data.length) || !data.data) {
