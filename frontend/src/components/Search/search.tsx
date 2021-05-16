@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Theme } from "../../theme";
 import "./search.scss";
+import { observer } from "mobx-react-lite";
+import { makeObservable, observable, observe } from "mobx";
 
 export const SearchInput = styled.input`
   background-color: ${Theme.lightShade};
@@ -20,31 +22,33 @@ export const SearchInput = styled.input`
   }
 `;
 const Search = () => {
-  const [search, setSearch] = useState<string>("");
+  const [query, setQuery] = useState("");
   const history = useHistory();
-
+  const location = useLocation();
   useEffect(() => {
-    const { pathname } = history.location;
-    if (pathname === "/" && search.length) {
-      setSearch("");
+    const { pathname } = location;
+    if (pathname === "/") {
+      setQuery("");
     }
-  }, [history.location.pathname]);
+  }, [location.pathname]);
   return (
     <div className="search">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          history.push(`/${search}`);
+          history.push(`/${query}`);
         }}
       >
         <SearchInput
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={query}
+          onChange={(e) => {
+            const val = e.target.value;
+            setQuery(val);
+          }}
           placeholder="Lookup a user"
         />
       </form>
     </div>
   );
 };
-
 export default Search;

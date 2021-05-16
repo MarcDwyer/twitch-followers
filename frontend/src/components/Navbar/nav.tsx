@@ -4,6 +4,7 @@ import { Theme } from "../../theme";
 import { FaHome } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import Loader from "react-loader-spinner";
 
 import "./nav.scss";
 import { observer } from "mobx-react-lite";
@@ -27,7 +28,17 @@ const Nav = observer(({ tData }: Props) => {
     <div className="nav" style={{ backgroundColor: Theme.shadeColor }}>
       <HomeBtn onClick={() => history.push("/")} />
       <div className="search-loader">
-        <div className="loader">{tData.isLoading && <span>loading</span>}</div>
+        <div className="loader">
+          {tData.isLoading && (
+            <Loader
+              type="Puff"
+              color="#00BFFF"
+              height={100}
+              width={100}
+              timeout={3000} //3 secs
+            />
+          )}
+        </div>
         <Search />
       </div>
     </div>
