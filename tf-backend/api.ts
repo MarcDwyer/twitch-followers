@@ -37,7 +37,6 @@ export default class API {
     try {
       const data = await this.fetchTwitch<TwitchLookUp.RootLookUp>(url);
       if (!data || (data.data && !data.data.length) || !data.data) {
-        console.log(data)
         throw "No stream found here";
       }
       result = data.data[0];
