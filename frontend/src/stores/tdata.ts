@@ -15,22 +15,20 @@ export default class TData {
     makeAutoObservable(this);
   }
 
-  @action
   mergeFollows(newFollows: TwitchLookUp.ResolvedList) {
     if (this.data) {
       this.data.follows = [...this.data.follows, ...newFollows];
     }
   }
-  @computed
   get isDone() {
     if (!this.data) return false;
     return this.data.follows.length >= this.data._total;
   }
-  @action
   async reqData(user: string) {
     this.isLoading = true;
     const prefix =
-      process.env.NODE_ENV === "development"
+      //@ts-ignore
+      import.meta.env.MODE === "development"
         ? ``
         : `https://${document.location.hostname}`;
     let url = prefix + `/followers/${user}/${this.data?.cursor || "none"}`;
@@ -58,7 +56,6 @@ export default class TData {
       this.isLoading = false;
     }
   }
-  @action
   reset() {
     const not = {
       initState: true,

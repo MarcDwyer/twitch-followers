@@ -6,7 +6,6 @@ import { useDebouncedCallback } from "use-debounce";
 
 import Card from "../Card/card";
 
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./results.scss";
 
 type Props = {
@@ -31,7 +30,7 @@ const Results = observer(({ tData }: Props) => {
       return false;
     }
   };
-  const [paginate] = useDebouncedCallback(() => {
+  const debounced = useDebouncedCallback(() => {
     const isBottom = didScrollBottom();
     if (
       isBottom &&
@@ -52,11 +51,11 @@ const Results = observer(({ tData }: Props) => {
   useEffect(() => {
     if (resRef && resRef.current) {
       console.log("set listener");
-      resRef.current.addEventListener("scroll", paginate);
+      resRef.current.addEventListener("scroll", debounced);
     }
 
     return () => {
-      resRef.current?.removeEventListener("scroll", paginate);
+      resRef.current?.removeEventListener("scroll", debounced);
     };
   }, [resRef]);
   return (
@@ -71,12 +70,10 @@ const Results = observer(({ tData }: Props) => {
           <h1>
             {data.viewing.display_name} follows {data._total} streams
           </h1>
-          <div className="inner-results">
-            <div className="result-grid">
-              {data.follows.map((f) => {
-                return <Card follow={f} style={{}} />;
-              })}
-            </div>
+          <div className="result-grid">
+            {data.follows.map((f, i) => {
+              return <Card key={i} follow={f} style={{}} />;
+            })}
           </div>
         </React.Fragment>
       )}

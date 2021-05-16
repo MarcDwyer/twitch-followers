@@ -7,7 +7,6 @@ import styled from "styled-components";
 
 import "./nav.scss";
 import { observer } from "mobx-react-lite";
-import Loader from "react-loader-spinner";
 import TData from "../../stores/tdata";
 
 const HomeBtn = styled(FaHome)`
@@ -28,16 +27,7 @@ const Nav = observer(({ tData }: Props) => {
     <div className="nav" style={{ backgroundColor: Theme.shadeColor }}>
       <HomeBtn onClick={() => history.push("/")} />
       <div className="search-loader">
-        <div className="loader">
-          {tData.isLoading && (
-            <Loader
-              type="Puff"
-              color={Theme.reallyLight}
-              height={25}
-              width={25}
-            />
-          )}
-        </div>
+        <div className="loader">{tData.isLoading && <span>loading</span>}</div>
         <Search />
       </div>
     </div>

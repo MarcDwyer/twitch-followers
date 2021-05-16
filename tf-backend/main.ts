@@ -12,6 +12,7 @@ if (!oauth || !clientId) throw new Error("missing credentials");
 const twitch = new TwitchHub(55, { oauth, clientId });
 
 router.get("/followers/:user/:cursor", async (ctx) => {
+  console.log(ctx);
   const { user } = ctx.params;
   let cursor = ctx.params.cursor;
   if (!user) return;

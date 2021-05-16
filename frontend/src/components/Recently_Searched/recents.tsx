@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { useTransition } from "react-spring";
 import styled from "styled-components";
 
 import RecentlySearched from "../../stores/recently";

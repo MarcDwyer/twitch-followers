@@ -1,9 +1,0 @@
-version: "3"
-services:
-  deno-backend:
-    build: backend
-    ports:
-      - "1567:1337"
-    container_name: tf_backend
-    environment:
-      - TWITCH=6urve0388wq48aqtm4lobjmq7zllvy
