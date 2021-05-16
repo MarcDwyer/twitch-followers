@@ -31,13 +31,12 @@ export default class API {
     }
     return data;
   }
-
   async getSingleUser(login: string) {
-    const test = this.english.test(login);
-    if (!test) throw "Only accept queries in english";
     const url = "https://api.twitch.tv/helix/users?login=" + login;
     let result: TwitchLookUp.User | BErrorMsg;
     try {
+      const test = this.english.test(login);
+      if (!test) throw "Only accept queries in english";
       const data = await this.fetchTwitch<TwitchLookUp.RootLookUp>(url);
       if (!data || (data.data && !data.data.length) || !data.data) {
         throw "No stream found here";
