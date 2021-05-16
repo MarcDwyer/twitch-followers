@@ -58,7 +58,6 @@ export default class TwitchHub {
     cursor?: string
   ): Promise<BErrorMsg | TwitchLookUp.MyData> {
     const viewing = await this.api.getSingleUser(username);
-    console.log(viewing);
     if ("error" in viewing) return viewing;
     const follows = await this.api.getFollowers(viewing.id, cursor);
     const fup = await this.getFollowerProfiles(follows);
